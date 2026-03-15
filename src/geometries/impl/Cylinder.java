@@ -13,33 +13,31 @@ public class Cylinder extends Tube {
     /**
      * Height of the cylinder.
      */
-    private final double height;
+    private final double _height;
 
     /**
-     * Constructs a cylinder from axis ray, radius, and height.
+     * Constructs a cylinder from radius, axis ray, and height.
      *
-     * @param axis axis ray
      * @param radius radius
+     * @param axis axis ray
      * @param height cylinder height
      */
-    public Cylinder(final Ray axis, final double radius, final double height) {
-        super(axis, radius);
+    public Cylinder(final double radius, final Ray axis, final double height) {
+        super(radius, axis);
         if (height <= 0) {
             throw new IllegalArgumentException("Height must be positive");
         }
-        this.height = height;
+        this._height = height;
     }
 
-
+    /**
+     * Returns the normal vector to the cylinder at a given point.
+     *
+     * @param point point on the cylinder
+     * @return normal vector
+     */
     @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof Cylinder other)) return false;
-        return super.equals(other) && height == other.height;
-    }
-
-    @Override
-    public String toString() {
-        return "Cylinder{axis=" + axis + ", radius=" + radius + ", height=" + height + "}";
+    public Vector getNormal(Point point) {
+        return null;
     }
 }

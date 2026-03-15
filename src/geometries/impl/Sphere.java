@@ -11,7 +11,7 @@ public class Sphere extends RadialGeometry {
     /**
      * Center point of the sphere.
      */
-    private final Point center;
+    private final Point _center;
 
     /**
      * Constructs a sphere from center and radius.
@@ -21,7 +21,7 @@ public class Sphere extends RadialGeometry {
      */
     public Sphere(final Point center, final double radius) {
         super(radius);
-        this.center = center;
+        this._center = center;
     }
 
     /**
@@ -39,11 +39,11 @@ public class Sphere extends RadialGeometry {
     public boolean equals(final Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof Sphere other)) return false;
-        return center.equals(other.center) && radius == other.radius;
+        return _center.equals(other._center) && _radius == other._radius;
     }
 
     @Override
     public String toString() {
-        return "Sphere{center=" + center + ", radius=" + radius + "}";
+        return "Sphere{center=" + _center + ", radius=" + _radius + "}";
     }
 }

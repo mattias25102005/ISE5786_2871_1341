@@ -13,17 +13,17 @@ public class Tube extends RadialGeometry {
     /**
      * Axis ray of the tube.
      */
-    protected final Ray axis;
+    protected final Ray _axis;
 
     /**
-     * Constructs a tube from axis ray and radius.
+     * Constructs a tube from radius and axis ray.
      *
-     * @param axis axis ray
      * @param radius radius
+     * @param axis axis ray
      */
-    public Tube(final Ray axis, final double radius) {
+    public Tube(final double radius, final Ray axis) {
         super(radius);
-        this.axis = axis;
+        this._axis = axis;
     }
 
     /**
@@ -33,18 +33,7 @@ public class Tube extends RadialGeometry {
      * @return normal vector
      */
     @Override
-    public Vector getNormal(final Point point) {
+    public Vector getNormal(Point point) {
         return null;
-    }
-    @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof Tube other)) return false;
-        return axis.equals(other.axis) && radius == other.radius;
-    }
-
-    @Override
-    public String toString() {
-        return "Tube{axis=" + axis + ", radius=" + radius + "}";
     }
 }

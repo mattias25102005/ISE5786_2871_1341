@@ -62,9 +62,9 @@ public class Point {
      * @return squared distance
      */
     public double distanceSquared(final Point other) {
-        final double dx = this.xyz._d1() - other.xyz._d1();
+        final double dx = this.xyz._d1()- other.xyz._d1();
         final double dy = this.xyz._d2() - other.xyz._d2();
-        final double dz = this.xyz._d3() - other.xyz._d3();
+        final double dz = this.xyz._d3()- other.xyz._d3();
         return dx * dx + dy * dy + dz * dz;
     }
 
@@ -87,6 +87,6 @@ public class Point {
 
     @Override
     public String toString() {
-        return "Point : " + xyz;
+        return "Point" + xyz;
     }
 }

@@ -10,12 +10,12 @@ public abstract class RadialGeometry extends Geometry {
     /**
      * Radius of the geometry.
      */
-    protected final double radius;
+    protected final double _radius;
 
     /**
      * Squared radius of the geometry.
      */
-    protected final double radiusSquared;
+    protected final double _radiusSquared;
 
     /**
      * Constructs a radial geometry with a given radius.
@@ -27,12 +27,12 @@ public abstract class RadialGeometry extends Geometry {
         if (radius <= 0) {
             throw new IllegalArgumentException("Radius must be positive");
         }
-        this.radius = radius;
-        this.radiusSquared = radius * radius;
+        this._radius = radius;
+        this._radiusSquared = radius * radius;
     }
 
     @Override
     public String toString() {
-        return "radius=" + radius;
+        return "radius=" + _radius;
     }
 }

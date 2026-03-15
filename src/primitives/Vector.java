@@ -6,6 +6,10 @@ package primitives;
  */
 public class Vector extends Point {
 
+    public static final Vector AXIS_X = new Vector(1, 0, 0);
+    public static final Vector AXIS_Y = new Vector(0, 1, 0);
+    public static final Vector AXIS_Z = new Vector(0, 0, 1);
+
     /**
      * Constructs a vector from three coordinates.
      *
@@ -34,32 +38,14 @@ public class Vector extends Point {
         }
     }
 
-    /**
-     * Adds another vector to this vector.
-     *
-     * @param other other vector
-     * @return new vector representing the sum
-     */
     public Vector add(final Vector other) {
         return new Vector(this.xyz.add(other.xyz));
     }
 
-    /**
-     * Scales this vector by a scalar.
-     *
-     * @param scalar scalar value
-     * @return new scaled vector
-     */
     public Vector scale(final double scalar) {
         return new Vector(this.xyz.scale(scalar));
     }
 
-    /**
-     * Calculates dot product with another vector.
-     *
-     * @param other other vector
-     * @return dot product
-     */
     public double dotProduct(final Vector other) {
         return alignZero(
                 this.xyz._d1() * other.xyz._d1() +
@@ -68,75 +54,34 @@ public class Vector extends Point {
         );
     }
 
-    /**
-     * Calculates cross product with another vector.
-     *
-     * @param other other vector
-     * @return cross product vector
-     */
-    public Vector crossProduct(final Vector other) {
+    public Vector crossProduct(final Vector other) { // a verif
         final double x = this.xyz._d2() * other.xyz._d3() - this.xyz._d3() * other.xyz._d2();
         final double y = this.xyz._d3() * other.xyz._d1() - this.xyz._d1() * other.xyz._d3();
         final double z = this.xyz._d1() * other.xyz._d2() - this.xyz._d2() * other.xyz._d1();
         return new Vector(x, y, z);
     }
 
-    /**
-     * Calculates squared length of the vector.
-     *
-     * @return squared length
-     */
     public double lengthSquared() {
         return dotProduct(this);
     }
 
-    /**
-     * Calculates length of the vector.
-     *
-     * @return vector length
-     */
     public double length() {
         return Math.sqrt(lengthSquared());
     }
 
-    /**
-     * Calculates squared distance between this vector and another vector.
-     *
-     * @param other other vector
-     * @return squared distance
-     */
-    @Override
-    public double distanceSquared(final Point other) {
-        return super.distanceSquared(other);
-    }
 
-    /**
-     * Calculates distance between this vector and another vector.
-     *
-     * @param other other vector
-     * @return distance
-     */
-    @Override
-    public double distance(final Point other) {
-        return super.distance(other);
-    }
 
-    /**
-     * Returns the normalized vector.
-     *
-     * @return new normalized vector
-     */
     public Vector normalize() {
         final double len = length();
         return new Vector(
                 alignZero(this.xyz._d1() / len),
-                alignZero(this.xyz._d2()/ len),
+                alignZero(this.xyz._d2() / len),
                 alignZero(this.xyz._d3() / len)
         );
     }
 
     @Override
-    public boolean equals(final Object obj) {
+    public boolean equals(final Object obj) { // a faire
         return super.equals(obj);
     }
 
@@ -145,12 +90,6 @@ public class Vector extends Point {
         return "Vector" + xyz;
     }
 
-    /**
-     * Shortcut to Util.alignZero.
-     *
-     * @param number value to align
-     * @return aligned value
-     */
     private static double alignZero(final double number) {
         return Util.alignZero(number);
     }

@@ -8,12 +8,12 @@ public class Ray {
     /**
      * Starting point of the ray.
      */
-    public final Point origin;
+    private final Point _origin;
 
     /**
      * Direction vector of the ray (always normalized).
      */
-    public final Vector direction;
+    private final Vector _direction;
 
     /**
      * Constructs a ray from origin point and direction vector.
@@ -23,19 +23,37 @@ public class Ray {
      * @param direction direction vector
      */
     public Ray(final Point origin, final Vector direction) {
-        this.origin = origin;
-        this.direction = direction.normalize();
+        this._origin = origin;
+        this._direction = direction.normalize();
+    }
+
+    /**
+     * Returns the origin point of the ray.
+     *
+     * @return origin point
+     */
+    public Point getOrigin() {
+        return _origin;
+    }
+
+    /**
+     * Returns the direction vector of the ray.
+     *
+     * @return normalized direction vector
+     */
+    public Vector getDirection() {
+        return _direction;
     }
 
     @Override
     public boolean equals(final Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof Ray other)) return false;
-        return origin.equals(other.origin) && direction.equals(other.direction);
+        return _origin.equals(other._origin) && _direction.equals(other._direction);
     }
 
     @Override
     public String toString() {
-        return "Ray{origin=" + origin + ", direction=" + direction + "}";
+        return "Ray{origin=" + _origin + ", direction=" + _direction + "}";
     }
 }
