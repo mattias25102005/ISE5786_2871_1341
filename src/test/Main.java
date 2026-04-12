@@ -3,8 +3,16 @@ package test;
 import static java.lang.System.out;
 import static primitives.Util.isZero;
 
-import geometries.impl.*;
-import primitives.*;
+import geometries.impl.Cylinder;
+import geometries.impl.Plane;
+import geometries.impl.Polygon;
+import geometries.impl.Sphere;
+import geometries.impl.Triangle;
+import geometries.impl.Tube;
+import primitives.Double3;
+import primitives.Point;
+import primitives.Ray;
+import primitives.Vector;
 
 /**
  * Basic sanity tests for the primitives classes.

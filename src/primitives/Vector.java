@@ -93,4 +93,7 @@ public class Vector extends Point {
     private static double alignZero(final double number) {
         return Util.alignZero(number);
     }
+    public Vector subtract(final Vector other) {
+        return new Vector(this.xyz.subtract(other.xyz));
+    }
 }

@@ -56,4 +56,15 @@ public class Ray {
     public String toString() {
         return "Ray{origin=" + _origin + ", direction=" + _direction + "}";
     }
+    /**
+     * Get a point on the ray at a specific distance t from the origin.
+     * * @param t distance from the origin (scalar)
+     * @return the point P = P0 + t * v
+     */
+    public Point getPoint(double t) {
+        if (Util.isZero(t)) {
+            return _origin;
+        }
+        return _origin.add(_direction.scale(t));
+    }
 }

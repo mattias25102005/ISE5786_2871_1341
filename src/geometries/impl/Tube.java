@@ -1,8 +1,8 @@
 package geometries.impl;
 
+import primitives.Util;
 import primitives.Point;
 import primitives.Ray;
-import primitives.Util;
 import primitives.Vector;
 
 /**
@@ -34,6 +34,18 @@ public class Tube extends RadialGeometry {
      */
     @Override
     public Vector getNormal(Point point) {
-        return null;
+        // On utilise les noms exacts de ton fichier Ray.java
+        Point p0 = _axis.getOrigin();    // Changé getP0() -> getOrigin()
+        Vector v = _axis.getDirection(); // Changé getDir() -> getDirection()
+
+        // Le reste du calcul est identique
+        double t = v.dotProduct(point.subtract(p0));
+
+        if (Util.isZero(t)) {
+            return point.subtract(p0).normalize();
+        }
+
+        Point o = p0.add(v.scale(t));
+        return point.subtract(o).normalize();
     }
 }

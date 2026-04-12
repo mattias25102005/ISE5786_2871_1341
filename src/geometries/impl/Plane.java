@@ -21,26 +21,33 @@ public final class Plane extends Geometry {
 
     /**
      * Constructs a plane from a point and a normal vector.
-     *
-     * @param point point on the plane
+     * * @param point  point on the plane
      * @param normal normal vector to the plane
      */
     public Plane(final Point point, final Vector normal) {
         this._point = point;
-        this._normal = normal;
+        // On normalise le vecteur pour s'assurer qu'il a une longueur de 1
+        this._normal = normal.normalize();
     }
 
     /**
      * Constructs a plane from three points.
-     * At this stage, only one reference point is stored and the normal is null.
-     *
-     * @param p1 first point
+     * The normal is calculated using the vector product of (p2-p1) and (p3-p1).
+     * * @param p1 first point
      * @param p2 second point
      * @param p3 third point
+     * @throws IllegalArgumentException if the points are collinear
      */
     public Plane(final Point p1, final Point p2, final Point p3) {
         this._point = p1;
-        this._normal = null;
+
+        // Calcul de deux vecteurs à partir des trois points
+        Vector v1 = p2.subtract(p1);
+        Vector v2 = p3.subtract(p1);
+
+        // La normale est le produit vectoriel de v1 et v2, ensuite normalisé
+        // Note: crossProduct lancera une exception si les points sont alignés
+        this._normal = v1.crossProduct(v2).normalize();
     }
 
     @Override
@@ -53,7 +60,7 @@ public final class Plane extends Geometry {
         if (this == obj) return true;
         if (!(obj instanceof Plane other)) return false;
         return _point.equals(other._point)
-                && (_normal == null ? other._normal == null : _normal.equals(other._normal));
+                && _normal.equals(other._normal);
     }
 
     @Override

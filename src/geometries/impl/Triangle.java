@@ -1,7 +1,7 @@
 package geometries.impl;
 
 import primitives.Point;
-
+import primitives.Vector;
 /**
  * Class representing a triangle in 3D Cartesian coordinates.
  */
@@ -21,5 +21,9 @@ public class Triangle extends Polygon {
     @Override
     public String toString() {
         return "Triangle" + super.toString();
+    }
+    @Override
+    public Vector getNormal(Point point) {
+        return super.getNormal(point);
     }
 }
