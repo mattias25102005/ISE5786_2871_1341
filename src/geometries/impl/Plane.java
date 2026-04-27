@@ -1,8 +1,15 @@
 package geometries.impl;
 
+import primitives.*;
+import java.util.List;
+import static primitives.Util.*;
+
 import geometries.api.Geometry;
 import primitives.Point;
+import primitives.Ray;
 import primitives.Vector;
+
+import java.util.List;
 
 /**
  * Class representing a plane in 3D Cartesian coordinates.
@@ -66,5 +73,47 @@ public final class Plane extends Geometry {
     @Override
     public String toString() {
         return "Plane{point=" + _point + ", normal=" + _normal + "}";
+    }
+
+
+    /**
+     * Classe représentant un plan dans l'espace 3D
+     */
+
+    @Override
+    public List<Point> findIntersections(Ray ray) {
+        Point p0 = ray.getOrigin();
+        Vector v = ray.getDirection();
+
+        // 1. Calcul du dénominateur : n ⋅ v
+        // On utilise _normal (le nom de ton champ)
+        double nv = _normal.dotProduct(v);
+
+        // Si nv est 0, le rayon est parallèle au plan
+        if (isZero(nv)) {
+            return null;
+        }
+
+        // 2. Calcul du numérateur : n ⋅ (Q - P0)
+        Vector p0q0;
+        try {
+            // ICI : On remplace q0 par _point (le nom de ton champ)
+            p0q0 = _point.subtract(p0);
+        } catch (IllegalArgumentException e) {
+            // Si P0 == _point, le rayon commence sur le plan
+            return null;
+        }
+
+        double nP0Q0 = alignZero(_normal.dotProduct(p0q0));
+
+        // 3. Calcul de t = (n ⋅ (Q - P0)) / (n ⋅ v)
+        double t = alignZero(nP0Q0 / nv);
+
+        // On ne retourne le point que si t > 0
+        if (t > 0) {
+            return List.of(ray.getPoint(t));
+        }
+
+        return null;
     }
 }

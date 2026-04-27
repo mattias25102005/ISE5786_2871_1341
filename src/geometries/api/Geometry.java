@@ -6,7 +6,7 @@ import primitives.Vector;
 /**
  * Abstract base class for all geometries.
  */
-public abstract class Geometry {
+public abstract class Geometry extends Intersectable {
 
     /**
      * Returns the normal vector to the geometry at a given point.

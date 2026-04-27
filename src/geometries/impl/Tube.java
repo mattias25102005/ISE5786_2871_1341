@@ -5,6 +5,8 @@ import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
 
+import java.util.List;
+
 /**
  * Class representing an infinite tube in 3D Cartesian coordinates.
  */
@@ -47,5 +49,10 @@ public class Tube extends RadialGeometry {
 
         Point o = p0.add(v.scale(t));
         return point.subtract(o).normalize();
+    }
+
+    @Override
+    public List<Point> findIntersections(Ray ray) {
+        return null;
     }
 }

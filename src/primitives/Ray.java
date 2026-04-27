@@ -1,5 +1,7 @@
 package primitives;
 
+import java.util.List;
+
 /**
  * Class representing a ray in 3D Cartesian coordinates.
  */
@@ -66,5 +68,26 @@ public class Ray {
             return _origin;
         }
         return _origin.add(_direction.scale(t));
+    }/**
+     * Trouve le point le plus proche de l'origine du rayon parmi une liste de points.
+     * @param points Liste des points d'intersections (peut être null)
+     * @return Le point le plus proche ou null si la liste est vide/null
+     */
+    public Point findClosestPoint(List<Point> points) {
+        if (points == null || points.isEmpty()) {
+            return null; //
+        }
+
+        Point closest = null;
+        double minDistance = Double.POSITIVE_INFINITY;
+
+        for (Point p : points) {
+            double distance = _origin.distance(p);
+            if (distance < minDistance) {
+                minDistance = distance;
+                closest = p;
+            }
+        }
+        return closest;
     }
 }
