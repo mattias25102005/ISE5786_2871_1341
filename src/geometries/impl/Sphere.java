@@ -63,7 +63,7 @@ public class Sphere extends RadialGeometry {
         try {
             l = _center.subtract(p0);
         } catch (IllegalArgumentException ignore) {
-            // Le rayon commence au centre : le seul point est à une distance r
+            // Le rayon commence au centre de la sphère
             return List.of(ray.getPoint(_radius));
         }
 
@@ -71,24 +71,26 @@ public class Sphere extends RadialGeometry {
         double dSquared = alignZero(l.lengthSquared() - tm * tm);
         double rSquared = _radius * _radius;
 
-        // Si la distance au centre est >= au rayon, pas d'intersection (ou tangence)
-        if (alignZero(dSquared - rSquared) > 0) return null;
+        // Si la distance est > au rayon, pas d'intersection
+        if (dSquared >= rSquared) return null;
 
         double th = alignZero(Math.sqrt(rSquared - dSquared));
 
         double t1 = alignZero(tm - th);
         double t2 = alignZero(tm + th);
 
-        // On ne garde que les points strictement devant le rayon (t > 0)
-        if (t2 <= 0) return null; // Les deux points sont derrière ou sur l'origine
+        // On vérifie chaque point séparément
+        boolean t1Valid = alignZero(t1) > 0;
+        boolean t2Valid = alignZero(t2) > 0;
 
-        if (t1 > 0) {
-            // Le rayon traverse la sphère (2 points devant)
+        if (t1Valid && t2Valid) {
             return List.of(ray.getPoint(t1), ray.getPoint(t2));
-        } else {
-            // Le rayon est à l'intérieur de la sphère (seul t2 est devant)
+        } else if (t1Valid) {
+            return List.of(ray.getPoint(t1));
+        } else if (t2Valid) {
             return List.of(ray.getPoint(t2));
         }
-    }
 
+        return null;
+    }
 }
