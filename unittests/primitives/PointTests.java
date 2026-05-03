@@ -4,9 +4,15 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/** Unit tests for primitives.Point class. */
 class PointTests {
+
+    /** Default constructor for tests. */
+    public PointTests() {}
+    /** Permissible floating point comparator delta. */
     private final double DELTA = 0.000001;
 
+    /** Test subtract between points producing a vector. */
     @Test
     void testSubtract() {
         Point p1 = new Point(1, 2, 3);
@@ -15,6 +21,7 @@ class PointTests {
         assertEquals(new Vector(1, 1, 1), p2.subtract(p1), "Subtract() wrong result");
     }
 
+    /** Test distance between two points. */
     @Test
     void testDistance() {
         Point p1 = new Point(0, 0, 0);
@@ -22,6 +29,7 @@ class PointTests {
         // TC01: Simple distance
         assertEquals(3, p1.distance(p2), DELTA, "distance() wrong result");
     }
+    /** Test addition of a vector to a point. */
     @Test
     void testAdd() {
         Point p1 = new Point(1, 2, 3);
@@ -29,6 +37,7 @@ class PointTests {
         assertEquals(new Point(2, 4, 6), p1.add(new Vector(1, 2, 3)), "Point.add() ne fonctionne pas correctement");
     }
 
+    /** Test squared distance between two points. */
     @Test
     void testDistanceSquared() {
         Point p1 = new Point(1, 2, 3);

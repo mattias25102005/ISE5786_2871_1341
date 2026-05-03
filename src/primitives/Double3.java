@@ -9,7 +9,6 @@ import java.util.Objects;
 
 /**
  * Immutable container for three double values.
- * <p>
  * The class is used as a basic numeric structure in the primitives package.
  * Typical uses include:
  * <ul>
@@ -17,7 +16,6 @@ import java.util.Objects;
  * <li>Point or vector coordinates</li>
  * <li>Material or attenuation coefficients</li>
  * </ul>
- * </p>
  * This class is intentionally minimal and optimized for performance,
  * as it is heavily used in geometric and color computations. It performs no
  * argument validation (such as {@code null} checks or division-by-zero checks).
@@ -41,6 +39,12 @@ public record Double3(double _d1, double _d2, double _d3) {
     */
    public Double3(double value) { this(value, value, value); }
 
+   /**
+    * Checks if this triad is equal to another object.
+    * @param obj the object to compare with
+    * @return {@code true} if the object is a Double3 triad with
+    *         components nearly equal to this triad's components
+    */
    @Override
    public boolean equals(Object obj) {
       return this == obj
@@ -50,9 +54,17 @@ public record Double3(double _d1, double _d2, double _d3) {
                   && isZero(_d3 - od3);
    }
 
+   /**
+    * Computes a hash code for this triad.
+    * @return a hash code value for this object.
+    */
    @Override
    public int hashCode() { return Objects.hash(_d1, _d2, _d3); }
 
+   /**
+    * Converts this triad to a string.
+    * @return a string representation of the object.
+    */
    @Override
    public String toString() { return "(" + _d1 + "," + _d2 + "," + _d3 + ")"; }
 

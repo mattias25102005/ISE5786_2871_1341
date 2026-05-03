@@ -4,7 +4,12 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import primitives.*;
 import java.util.List;
+/** Unit tests for Plane geometry. */
 class PlaneTests {
+
+    /** Default constructor for tests. */
+    public PlaneTests() {}
+    /** Permissible floating point delta for comparisons in tests. */
     private final double DELTA = 0.000001;
 
     /** Test method for {@link geometries.impl.Plane#getNormal(primitives.Point)}. */

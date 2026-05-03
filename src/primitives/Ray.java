@@ -58,9 +58,10 @@ public class Ray {
     public String toString() {
         return "Ray{origin=" + _origin + ", direction=" + _direction + "}";
     }
+
     /**
      * Get a point on the ray at a specific distance t from the origin.
-     * * @param t distance from the origin (scalar)
+     * @param t distance from the origin (scalar)
      * @return the point P = P0 + t * v
      */
     public Point getPoint(double t) {
@@ -68,7 +69,9 @@ public class Ray {
             return _origin;
         }
         return _origin.add(_direction.scale(t));
-    }/**
+    }
+
+    /**
      * Trouve le point le plus proche de l'origine du rayon parmi une liste de points.
      * @param points Liste des points d'intersections (peut être null)
      * @return Le point le plus proche ou null si la liste est vide/null

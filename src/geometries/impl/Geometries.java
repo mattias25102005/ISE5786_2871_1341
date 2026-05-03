@@ -9,6 +9,7 @@ import java.util.List;
  * Classe Composite pour regrouper plusieurs formes géométriques
  */
 public class Geometries extends Intersectable {
+    /** Internal list of geometries contained in this composite. */
     private final List<Intersectable> geometries = new LinkedList<>();
 
     /**

@@ -28,7 +28,7 @@ public final class Plane extends Geometry {
 
     /**
      * Constructs a plane from a point and a normal vector.
-     * * @param point  point on the plane
+     * @param point  point on the plane
      * @param normal normal vector to the plane
      */
     public Plane(final Point point, final Vector normal) {
@@ -40,7 +40,7 @@ public final class Plane extends Geometry {
     /**
      * Constructs a plane from three points.
      * The normal is calculated using the vector product of (p2-p1) and (p3-p1).
-     * * @param p1 first point
+     * @param p1 first point
      * @param p2 second point
      * @param p3 third point
      * @throws IllegalArgumentException if the points are collinear

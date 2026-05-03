@@ -6,9 +6,15 @@ import org.junit.jupiter.api.Test;
 /**
  * Unit tests for primitives.Vector class
  */
+/** Unit tests for primitives.Vector class. */
 class VectorTests {
+
+    /** Default constructor for tests. */
+    public VectorTests() {}
+    /** Permissible floating point comparator delta. */
     private final double DELTA = 0.000001;
 
+    /** Test vector addition and zero-result behavior. */
     @Test
     void testAdd() {
         Vector v1 = new Vector(1, 2, 3);
@@ -21,6 +27,7 @@ class VectorTests {
             "add() to zero vector should throw exception");
     }
 
+    /** Test vector subtraction. */
     @Test
     void testSubtract() {
         Vector v1 = new Vector(1, 2, 3);
@@ -29,6 +36,7 @@ class VectorTests {
         assertEquals(new Vector(-4, -2, 0), v1.subtract(v2), "subtract() wrong result");
     }
 
+    /** Test scaling of vectors including zero-scale boundary. */
     @Test
     void testScale() {
         Vector v1 = new Vector(1, 2, 3);
@@ -40,6 +48,7 @@ class VectorTests {
             "scale by 0 should throw exception");
     }
 
+    /** Test dot product including orthogonality and known result. */
     @Test
     void testDotProduct() {
         Vector v1 = new Vector(1, 2, 3);
@@ -51,6 +60,7 @@ class VectorTests {
         assertEquals(-2, v1.dotProduct(new Vector(1, 0, -1)), DELTA, "dotProduct() wrong result");
     }
 
+    /** Test cross product properties: orthogonality and magnitude. */
     @Test
     void testCrossProduct() {
         Vector v1 = new Vector(1, 2, 3);
@@ -67,6 +77,7 @@ class VectorTests {
             "crossProduct() for parallel vectors should throw exception");
     }
 
+    /** Test squared length computation. */
     @Test
     void testLengthSquared() {
         Vector v = new Vector(1, 2, 2);
@@ -74,6 +85,7 @@ class VectorTests {
         assertEquals(9, v.lengthSquared(), DELTA, "lengthSquared() wrong result");
     }
 
+    /** Test vector length computation. */
     @Test
     void testLength() {
         Vector v = new Vector(0, 3, 4);
@@ -81,6 +93,7 @@ class VectorTests {
         assertEquals(5, v.length(), DELTA, "length() wrong result");
     }
 
+    /** Test normalization yields unit vector and preserves direction. */
     @Test
     void testNormalize() {
         Vector v = new Vector(1, 2, 3);
