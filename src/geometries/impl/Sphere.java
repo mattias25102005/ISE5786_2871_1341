@@ -72,7 +72,7 @@ public class Sphere extends RadialGeometry {
         double rSquared = _radius * _radius;
 
         // Si la distance au centre est >= au rayon, pas d'intersection (ou tangence)
-        if (alignZero(dSquared - rSquared) >= 0) return null;
+        if (alignZero(dSquared - rSquared) > 0) return null;
 
         double th = alignZero(Math.sqrt(rSquared - dSquared));
 

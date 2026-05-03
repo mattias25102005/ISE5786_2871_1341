@@ -35,7 +35,7 @@ public class GeometriesTests {
 
         assertNotNull(result, "L'intersection ne devrait pas être null");
 
-        assertEquals(4, result.size(), "On devrait avoir exactement 3 points (1 triangle + 2 sphère)");
+        assertEquals(4, result.size(), "On devrait avoir exactement 4 points (1 triangle + 2 sphère)");
 
         // =============== Boundary Values Tests ==================
 
