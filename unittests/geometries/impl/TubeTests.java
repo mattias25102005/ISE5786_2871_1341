@@ -10,6 +10,9 @@ import geometries.impl.Tube; // Assure-toi que cet import est là
  */
 class TubeTests {
 
+    /** Default constructor for tests. */
+    public TubeTests() {}
+
     /**
      * Test method for {@link geometries.impl.Tube#getNormal(primitives.Point)}.
      */

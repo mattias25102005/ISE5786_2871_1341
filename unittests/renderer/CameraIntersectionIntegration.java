@@ -17,12 +17,18 @@ import java.util.List;
 /**
  * Integration tests for Camera and Geometries intersections.
  */
+/**
+ * Integration tests for Camera and Geometries intersections.
+ */
 public class CameraIntersectionIntegration {
+
+    /** Default constructor for the test class. */
+    public CameraIntersectionIntegration() {}
 
     /**
      * Helper method to count intersections for all rays from a camera through a geometry.
      *
-     * * @param camera   The camera
+     * @param camera   The camera
      * @param geometry The geometry to test
      * @param expected Expected total number of intersections
      */
@@ -46,6 +52,7 @@ public class CameraIntersectionIntegration {
         assertEquals(expected, count, "Wrong number of intersections");
     }
 
+    /** Test intersection counts between camera rays and spheres. */
     @Test
     public void testCameraRaySphereIntegration() {
         Camera.Builder builder = Camera.getBuilder()
@@ -65,6 +72,7 @@ public class CameraIntersectionIntegration {
         // TC03: Sphère moyenne (10 intersections)
         assertIntersectionsCount(camera1, new Sphere(new Point(0, 0, -2), 2), 9);
     }
+    /** Test intersection counts between camera rays and planes. */
     @Test
     public void testCameraRayPlaneIntegration() {
         Camera.Builder builder = Camera.getBuilder()
@@ -87,6 +95,7 @@ public class CameraIntersectionIntegration {
         // Le plan est tellement incliné que les rayons du bas ne le touchent pas
         assertIntersectionsCount(camera, new Plane(new Point(0, 0, -5), new Vector(0, 1, -1)), 6);
     }
+    /** Test intersection counts between camera rays and triangles. */
     @Test
     public void testCameraRayTriangleIntegration() {
         Camera.Builder builder = Camera.getBuilder()

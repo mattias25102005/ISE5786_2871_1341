@@ -8,6 +8,9 @@ import java.util.List;
  * Interface pour tous les objets géométriques pouvant être intersectés par un rayon.
  */
 public abstract class Intersectable {
+    /** Protected constructor to avoid the default-constructor javadoc warning. */
+    protected Intersectable() {}
+
     /**
      * Trouve toutes les intersections entre un rayon et la forme géométrique.
      * @param ray Le rayon incident

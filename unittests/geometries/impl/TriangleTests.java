@@ -10,6 +10,9 @@ import primitives.*;
  */
 class TriangleTests {
 
+    /** Default constructor for tests. */
+    public TriangleTests() {}
+
     /**
      * Test method for {@link geometries.impl.Triangle#getNormal(primitives.Point)}.
      */

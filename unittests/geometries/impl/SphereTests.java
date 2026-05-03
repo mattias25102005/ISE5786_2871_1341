@@ -4,7 +4,11 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import primitives.*;
 import java.util.List;
+/** Unit tests for Sphere geometry. */
 class SphereTests {
+
+    /** Default constructor for tests. */
+    public SphereTests() {}
 
     /** Test method for {@link geometries.impl.Sphere#getNormal(primitives.Point)}. */
     @Test

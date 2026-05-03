@@ -8,6 +8,9 @@ import org.junit.jupiter.api.Test;
  */
 class RayTests {
 
+    /** Default constructor for tests. */
+    public RayTests() {}
+
     /** Test method for {@link primitives.Ray#getOrigin()}. */
     @Test
     void testGetOrigin() {
@@ -28,6 +31,7 @@ class RayTests {
         assertEquals(1, ray.getDirection().length(), 0.000001, "Direction should be normalized");
         assertEquals(v.normalize(), ray.getDirection(), "getDirection() failed");
     }
+    /** Test point computation along ray for various t values. */
     @Test
     void testGetPoint() {
         Ray ray = new Ray(new Point(1, 1, 1), new Vector(1, 0, 0));

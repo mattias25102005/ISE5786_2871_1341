@@ -5,8 +5,14 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import primitives.*;
 
+/** Unit tests for Geometries composite. */
 public class GeometriesTests {
 
+    /** Default constructor for tests. */
+    public GeometriesTests() {}
+
+
+    /** Test composite findIntersections behavior. */
     @Test
     public void testFindIntersections() {
         // --- LES OBJETS DU TEST ---

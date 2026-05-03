@@ -4,7 +4,11 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import primitives.*;
 
+/** Unit tests for Cylinder geometry. */
 class CylinderTests {
+
+    /** Default constructor for tests. */
+    public CylinderTests() {}
 
     /** Test method for {@link geometries.impl.Cylinder#getNormal(primitives.Point)}. */
     @Test

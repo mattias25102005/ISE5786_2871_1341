@@ -60,7 +60,7 @@ public class Ray {
     }
     /**
      * Get a point on the ray at a specific distance t from the origin.
-     * * @param t distance from the origin (scalar)
+     * @param t distance from the origin (scalar)
      * @return the point P = P0 + t * v
      */
     public Point getPoint(double t) {
