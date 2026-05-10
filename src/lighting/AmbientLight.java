@@ -6,6 +6,10 @@ import primitives.Color;
  * Immutable ambient light used by the scene to provide a base illumination.
  * Ambient light contributes a uniform color/intensity to all surfaces.
  */
+/**
+ * Immutable ambient light used by the scene to provide a base illumination.
+ * Ambient light contributes a uniform color/intensity to all surfaces.
+ */
 public class AmbientLight {
     /** The ambient intensity (color) provided to the scene. Immutable. */
     private final Color _intensity;
