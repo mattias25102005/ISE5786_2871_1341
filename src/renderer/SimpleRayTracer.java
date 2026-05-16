@@ -1,9 +1,12 @@
 package renderer;
 
+import geometries.api.Intersectable.Intersection; // Import indispensable
 import primitives.*;
 import scene.Scene;
-import java.util.List;
 
+/**
+ * Simple ray tracer implementation.
+ */
 public class SimpleRayTracer extends RayTracerBase {
 
     public SimpleRayTracer(Scene scene) {
@@ -12,15 +15,28 @@ public class SimpleRayTracer extends RayTracerBase {
 
     @Override
     public Color traceRay(Ray ray) {
-        var intersections = _scene.geometries.findIntersections(ray);
-        if (intersections == null) return _scene.background;
+        // 1. Appel de la méthode NVI calcIntersections (IMAGE 1 - POINT 5.א)
+        var intersections = _scene.geometries.calcIntersections(ray);
 
-        Point closestPoint = ray.findClosestPoint(intersections);
-        return calcColor(closestPoint);
+        if (intersections == null) {
+            return _scene.background;
+        }
+
+        // 2. Recherche de l'intersection la plus proche (objet Intersection entier)
+        var closestIntersection = ray.findClosestIntersection(intersections);
+
+        // 3. On passe l'objet Intersection à calcColor pour avoir accès à la géométrie
+        return calcColor(closestIntersection);
     }
 
-    // Méthode d'aide demandée par l'énoncé
-    private Color calcColor(Point intersection) {
-        return _scene.ambientLight.getIntensity();
+    /**
+     * Calcule la couleur au point d'intersection.
+     * (IMAGE 1 - POINT 5.ב)
+     * @param intersection l'intersection la plus proche
+     * @return la couleur calculée (Ambient + Emission)
+     */
+    private Color calcColor(Intersection intersection) {
+        // Formule : Couleur = (Lumière Ambiante) * ka + Émission de la géométrie
+        return _scene.ambientLight.getIntensity().scale(intersection.material.kA).add(intersection.geometry.getEmission());
     }
 }

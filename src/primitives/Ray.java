@@ -1,5 +1,6 @@
 package primitives;
 
+import geometries.api.Intersectable.Intersection;
 import java.util.List;
 
 /**
@@ -77,18 +78,31 @@ public class Ray {
      * @return Le point le plus proche ou null si la liste est vide/null
      */
     public Point findClosestPoint(List<Point> points) {
-        if (points == null || points.isEmpty()) {
-            return null; //
+        return points == null || points.isEmpty() ? null
+                : findClosestIntersection(points.stream()
+                                          .map(point -> new Intersection(null, point))
+                                          .toList()).point;
+    }
+
+    /**
+     * Trouve l'intersection la plus proche de l'origine du rayon.
+     * (RAJOUT ÉTAPE 4.א)
+     * @param intersections Liste des intersections (peut être null)
+     * @return L'intersection la plus proche ou null
+     */
+    public Intersection findClosestIntersection(List<Intersection> intersections) {
+        if (intersections == null || intersections.isEmpty()) {
+            return null;
         }
 
-        Point closest = null;
+        Intersection closest = null;
         double minDistance = Double.POSITIVE_INFINITY;
 
-        for (Point p : points) {
-            double distance = _origin.distance(p);
+        for (Intersection intersection : intersections) {
+            double distance = _origin.distanceSquared(intersection.point);
             if (distance < minDistance) {
                 minDistance = distance;
-                closest = p;
+                closest = intersection;
             }
         }
         return closest;

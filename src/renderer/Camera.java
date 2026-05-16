@@ -18,8 +18,8 @@ public class Camera implements Cloneable {
     private double width = 0;
     private double height = 0;
     private double distance = 0;
-    private int nX = 0;
-    private int nY = 0;
+    private int nX = 1;
+    private int nY = 1;
 
     private ImageWriter _imageWriter;
     private RayTracerBase _rayTracer;
@@ -82,11 +82,21 @@ public class Camera implements Cloneable {
         return this;
     }
 
+    /**
+     * Writes the rendered image to a file using the configured ImageWriter.
+     * @param fileName the destination file path or name
+     */
     public void writeToImage(String fileName) {
         if (_imageWriter == null) throw new MissingResourceException("Missing ImageWriter", "Camera", "_imageWriter");
         _imageWriter.writeToImage(fileName);
     }
 
+    /**
+     * Constructs a ray from the camera through the center of the given pixel.
+     * @param j the pixel column (x)
+     * @param i the pixel row (y)
+     * @return a Ray starting at the camera position going through the pixel
+     */
     public Ray constructRay(int j, int i) {
         double yi = alignZero(-(i - (nY - 1) / 2.0) * pixelHeight);
         double xj = alignZero((j - (nX - 1) / 2.0) * pixelWidth);
@@ -99,66 +109,121 @@ public class Camera implements Cloneable {
     }
 
     // --- CLASSE BUILDER ---
+    /**
+     * Builder for configuring and creating Camera instances.
+     * Use the builder to set location, orientation, viewport size, distance and output settings.
+     */
     public static class Builder {
         private final Camera _camera = new Camera();
         private Point _target = null;
         private Vector _vUp = Vector.AXIS_Y;
 
-        public Builder() {
-            // Valeur par défaut pour éviter "Resolution must be positive" dans CameraTests
-            _camera.nX = 1;
-            _camera.nY = 1;
-        }
 
+
+        /**
+         * Sets the camera location (p0).
+         * @param p0 the camera position in 3D space
+         * @return this Builder for chaining
+         */
         public Builder setLocation(Point p0) {
             this._camera.p0 = p0;
             return this;
         }
 
+        /**
+         * Sets the camera direction vectors.
+         * @param vTo the forward direction vector
+         * @param vUp the up direction vector
+         * @return this Builder for chaining
+         */
         public Builder setDirection(Vector vTo, Vector vUp) {
             this._camera.vTo = vTo;
             this._vUp = vUp;
             return this;
         }
 
+        /**
+         * Sets the camera direction by specifying a target point to look at.
+         * @param target the point the camera should look toward
+         * @return this Builder for chaining
+         */
         public Builder setDirection(Point target) {
             this._target = target;
             return this;
         }
 
+        /**
+         * Sets the camera direction by target and an explicit up vector.
+         * @param target the point the camera should look toward
+         * @param vUp the up direction vector
+         * @return this Builder for chaining
+         */
         public Builder setDirection(Point target, Vector vUp) {
             this._target = target;
             this._vUp = vUp;
             return this;
         }
 
+        /**
+         * Sets the viewport size in world units.
+         * @param width the viewport width
+         * @param height the viewport height
+         * @return this Builder for chaining
+         */
         public Builder setVpSize(double width, double height) {
             this._camera.width = width;
             this._camera.height = height;
             return this;
         }
 
+        /**
+         * Sets the distance from the camera to the view plane.
+         * @param distance the view plane distance
+         * @return this Builder for chaining
+         */
         public Builder setVpDistance(double distance) {
             this._camera.distance = distance;
             return this;
         }
 
+        /**
+         * Sets the image resolution (number of pixels) in X and Y.
+         * @param nX number of columns (width in pixels)
+         * @param nY number of rows (height in pixels)
+         * @return this Builder for chaining
+         */
         public Builder setResolution(int nX, int nY) {
             this._camera.nX = nX;
             this._camera.nY = nY;
             return this;
         }
 
+        /**
+         * Sets the ImageWriter used to output pixels and save images.
+         * @param imageWriter the ImageWriter instance to use
+         * @return this Builder for chaining
+         */
         public Builder setImageWriter(ImageWriter imageWriter) {
             this._camera._imageWriter = imageWriter;
             return this;
         }
 
+        /**
+         * Sets a custom RayTracer implementation to trace rays for rendering.
+         * @param rayTracer the RayTracer implementation to use
+         * @return this Builder for chaining
+         */
         public Builder setRayTracer(RayTracerBase rayTracer) {
             this._camera._rayTracer = rayTracer;
             return this;
         }
 
+        /**
+         * Convenience method to set a RayTracer by scene and type.
+         * @param scene the scene to render
+         * @param type the ray tracer type (e.g., SIMPLE)
+         * @return this Builder for chaining
+         */
         public Builder setRayTracer(Scene scene, RayTracerType type) {
             if (type == RayTracerType.SIMPLE) {
                 this._camera._rayTracer = new SimpleRayTracer(scene);
@@ -168,6 +233,11 @@ public class Camera implements Cloneable {
             return this;
         }
 
+        /**
+         * Builds and returns a validated Camera instance configured by this builder.
+         * Performs validation of resolution, direction, viewport size and distance.
+         * @return a constructed Camera instance
+         */
         public Camera build() {
             // Validation résolution
             if (_camera.nX <= 0 || _camera.nY <= 0)
@@ -216,6 +286,11 @@ public class Camera implements Cloneable {
     }
 
     @Override
+    /**
+     * Creates a shallow clone of this Camera. The ImageWriter and RayTracer references are copied
+     * (not deeply cloned) to allow shared resources for tests and rendering.
+     * @return a cloned Camera instance
+     */
     public Camera clone() {
         try {
             Camera cloned = (Camera) super.clone();

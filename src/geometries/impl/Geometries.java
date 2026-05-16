@@ -1,6 +1,7 @@
 package geometries.impl;
+
 import geometries.api.Intersectable;
-import primitives.*;
+import primitives.Ray;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,15 +34,19 @@ public class Geometries extends Intersectable {
         Collections.addAll(this.geometries, geometries);
     }
 
+    // --- MODIFICATIONS POUR LE DESIGN NVI (IMAGE 1) ---
+
     @Override
-    public List<Point> findIntersections(Ray ray) {
-        List<Point> result = null;
+    protected List<Intersection> calcIntersectionsHelper(Ray ray) {
+        List<Intersection> result = null;
 
         for (Intersectable item : geometries) {
-            var itemIntersections = item.findIntersections(ray);
+            // IMPORTANT : On appelle la méthode PUBLIQUE calcIntersections
+            // selon la consigne 3.ד.ב de l'image
+            var itemIntersections = item.calcIntersections(ray);
 
             if (itemIntersections != null) {
-                // Initialisation paresseuse (Lazy Initialization)
+                // Initialisation paresseuse
                 if (result == null) {
                     result = new LinkedList<>();
                 }
@@ -49,7 +54,6 @@ public class Geometries extends Intersectable {
             }
         }
 
-        // Retourne null si aucune intersection n'a été trouvée
         return result;
     }
 }

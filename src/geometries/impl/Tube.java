@@ -4,7 +4,6 @@ import primitives.Util;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
-
 import java.util.List;
 
 /**
@@ -36,11 +35,9 @@ public class Tube extends RadialGeometry {
      */
     @Override
     public Vector getNormal(Point point) {
-        // On utilise les noms exacts de ton fichier Ray.java
-        Point p0 = _axis.getOrigin();    // Changé getP0() -> getOrigin()
-        Vector v = _axis.getDirection(); // Changé getDir() -> getDirection()
+        Point p0 = _axis.getOrigin();
+        Vector v = _axis.getDirection();
 
-        // Le reste du calcul est identique
         double t = v.dotProduct(point.subtract(p0));
 
         if (Util.isZero(t)) {
@@ -51,8 +48,12 @@ public class Tube extends RadialGeometry {
         return point.subtract(o).normalize();
     }
 
+    // --- MODIFICATIONS POUR LE DESIGN NVI (IMAGE 1) ---
+
     @Override
-    public List<Point> findIntersections(Ray ray) {
+    protected List<Intersection> calcIntersectionsHelper(Ray ray) {
+        // On remplace findGeoIntersectionsHelper par calcIntersectionsHelper
+        // et GeoPoint par Intersection
         return null;
     }
 }

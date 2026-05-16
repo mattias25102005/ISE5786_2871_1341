@@ -1,59 +1,35 @@
 package geometries.impl;
 
-import primitives.*;
-import java.util.List;
-import static primitives.Util.*;
-
 import geometries.api.Geometry;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
-
 import java.util.List;
+import static primitives.Util.*;
 
 /**
  * Class representing a plane in 3D Cartesian coordinates.
  */
 public final class Plane extends Geometry {
 
-    /**
-     * A point on the plane.
-     */
     private final Point _point;
-
-    /**
-     * Normal vector to the plane.
-     */
     private final Vector _normal;
 
     /**
      * Constructs a plane from a point and a normal vector.
-     * @param point  point on the plane
-     * @param normal normal vector to the plane
      */
     public Plane(final Point point, final Vector normal) {
         this._point = point;
-        // On normalise le vecteur pour s'assurer qu'il a une longueur de 1
         this._normal = normal.normalize();
     }
 
     /**
      * Constructs a plane from three points.
-     * The normal is calculated using the vector product of (p2-p1) and (p3-p1).
-     * @param p1 first point
-     * @param p2 second point
-     * @param p3 third point
-     * @throws IllegalArgumentException if the points are collinear
      */
     public Plane(final Point p1, final Point p2, final Point p3) {
         this._point = p1;
-
-        // Calcul de deux vecteurs à partir des trois points
         Vector v1 = p2.subtract(p1);
         Vector v2 = p3.subtract(p1);
-
-        // La normale est le produit vectoriel de v1 et v2, ensuite normalisé
-        // Note: crossProduct lancera une exception si les points sont alignés
         this._normal = v1.crossProduct(v2).normalize();
     }
 
@@ -62,34 +38,17 @@ public final class Plane extends Geometry {
         return _normal;
     }
 
-    @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof Plane other)) return false;
-        return _point.equals(other._point)
-                && _normal.equals(other._normal);
-    }
+    // --- MODIFICATIONS POUR LE DESIGN NVI (ÉTAPE 3 & 4) ---
 
     @Override
-    public String toString() {
-        return "Plane{point=" + _point + ", normal=" + _normal + "}";
-    }
-
-
-    /**
-     * Classe représentant un plan dans l'espace 3D
-     */
-
-    @Override
-    public List<Point> findIntersections(Ray ray) {
+    protected List<Intersection> calcIntersectionsHelper(Ray ray) {
         Point p0 = ray.getOrigin();
         Vector v = ray.getDirection();
 
         // 1. Calcul du dénominateur : n ⋅ v
-        // On utilise _normal (le nom de ton champ)
         double nv = _normal.dotProduct(v);
 
-        // Si nv est 0, le rayon est parallèle au plan
+        // Si nv est proche de 0, le rayon est parallèle au plan
         if (isZero(nv)) {
             return null;
         }
@@ -97,10 +56,10 @@ public final class Plane extends Geometry {
         // 2. Calcul du numérateur : n ⋅ (Q - P0)
         Vector p0q0;
         try {
-            // ICI : On remplace q0 par _point (le nom de ton champ)
             p0q0 = _point.subtract(p0);
         } catch (IllegalArgumentException e) {
-            // Si P0 == _point, le rayon commence sur le plan
+            // Si P0 == _point, le rayon commence sur le plan (t=0),
+            // on considère qu'il n'y a pas d'intersection devant le rayon.
             return null;
         }
 
@@ -109,11 +68,23 @@ public final class Plane extends Geometry {
         // 3. Calcul de t = (n ⋅ (Q - P0)) / (n ⋅ v)
         double t = alignZero(nP0Q0 / nv);
 
-        // On ne retourne le point que si t > 0
+        // On ne retourne l'Intersection que si t > 0 (le point est devant le rayon)
         if (t > 0) {
-            return List.of(ray.getPoint(t));
+            return List.of(new Intersection(this, ray.getPoint(t)));
         }
 
         return null;
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Plane other)) return false;
+        return _point.equals(other._point) && _normal.equals(other._normal);
+    }
+
+    @Override
+    public String toString() {
+        return "Plane{point=" + _point + ", normal=" + _normal + "}";
     }
 }
