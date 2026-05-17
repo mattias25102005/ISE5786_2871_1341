@@ -20,6 +20,7 @@ public class Polygon extends Geometry {
 
     /**
      * Constructs a convex polygon from ordered vertices.
+     * @param vertices ordered list of vertices (at least 3)
      */
     public Polygon(Point... vertices) {
         if (vertices.length < 3)
@@ -54,7 +55,7 @@ public class Polygon extends Geometry {
     protected List<Intersection> calcIntersectionsHelper(Ray ray) {
         // 1. Intersection avec le plan du polygone
         // IMPORTANT : On appelle la méthode publique calcIntersections du plan
-        var intersections = _plane.calcIntersections(ray);
+        var intersections = _plane.findIntersections(ray);
         if (intersections == null) return null;
 
         Point p0 = ray.getOrigin();
@@ -76,7 +77,8 @@ public class Polygon extends Geometry {
         }
 
         boolean allPositive = true;
-        boolean allNegative = true;
+        boolean allNegative = true;        Vector v1 = _vertices.get(0).subtract(p0);
+
 
         for (double s : signals) {
             if (isZero(s)) return null; // Le point est sur une arête
@@ -86,7 +88,7 @@ public class Polygon extends Geometry {
 
         if (allPositive || allNegative) {
             // On retourne l'Intersection en remplaçant la géométrie du plan par 'this' (le polygone)
-            return List.of(new Intersection(this, intersections.get(0).point));
+            return List.of(new Intersection(this, intersections.get(0)));
         }
 
         return null;

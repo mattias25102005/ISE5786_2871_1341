@@ -26,7 +26,7 @@ public class Triangle extends Polygon {
     protected List<Intersection> calcIntersectionsHelper(Ray ray) {
         // 1. On réutilise la logique du plan pour trouver l'intersection
         // On récupère le plan du triangle (hérité de Polygon)
-        List<Intersection> intersections = _plane.calcIntersectionsHelper(ray);
+        List<Point> intersections = _plane.findIntersections(ray);
 
         if (intersections == null) return null;
 
@@ -50,7 +50,7 @@ public class Triangle extends Polygon {
         // Si tous ont le même signe, le point est dans le triangle
         if ((s1 > 0 && s2 > 0 && s3 > 0) || (s1 < 0 && s2 < 0 && s3 < 0)) {
             // CRITIQUE : On doit changer la géométrie de l'intersection de "Plane" à "this" (Triangle)
-            return List.of(new Intersection(this, intersections.get(0).point));
+            return List.of(new Intersection(this, intersections.get(0)));
         }
 
         return null;

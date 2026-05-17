@@ -10,9 +10,16 @@ import static primitives.Util.*;
  */
 public class Sphere extends Geometry { // Hérite de Geometry (qui hérite d'Intersectable)
 
+    /** Center point of the sphere */
     private final Point _center;
+    /** Radius of the sphere */
     private final double _radius; // Assure-toi que c'est accessible via RadialGeometry ou ici
 
+    /**
+     * Constructs a sphere with center and radius.
+     * @param center center point
+     * @param radius sphere radius
+     */
     public Sphere(final Point center, final double radius) {
         this._center = center;
         this._radius = radius;

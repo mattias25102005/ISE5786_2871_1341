@@ -12,6 +12,11 @@ import java.util.Objects;
 public abstract class Intersectable {
 
     /**
+     * Default constructor for Intersectable (documented to satisfy Javadoc).
+     */
+    protected Intersectable() {}
+
+    /**
      * PDS pour lier une géométrie à un point d'intersection.
      */
     public static class Intersection {
@@ -51,6 +56,8 @@ public abstract class Intersectable {
 
     /**
      * Méthode NVI - Appelée par le moteur de rendu
+     * @param ray le rayon utilisé pour calculer les intersections
+     * @return liste d'Intersection ou null si aucune intersection
      */
     public final List<Intersection> calcIntersections(Ray ray) {
         return calcIntersectionsHelper(ray);
@@ -58,11 +65,15 @@ public abstract class Intersectable {
 
     /**
      * Méthode abstraite à implémenter dans les formes (Sphere, Plane, etc.)
+     * @param ray le rayon à tester
+     * @return liste d'Intersection ou null si aucune
      */
     protected abstract List<Intersection> calcIntersectionsHelper(Ray ray);
 
     /**
      * Retourne uniquement les points d'intersection.
+     * @param ray le rayon à tester
+     * @return liste de points d'intersection ou null si aucune
      */
     public final List<Point> findIntersections(Ray ray) {
         var intersections = calcIntersections(ray);

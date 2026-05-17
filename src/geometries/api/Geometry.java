@@ -10,6 +10,11 @@ import primitives.Vector;
  */
 public abstract class Geometry extends Intersectable {
 
+    /**
+     * Default constructor for Geometry.
+     */
+    protected Geometry() {}
+
     /** The emission color of the geometry - Initialized to Black by default */
     private Color _emission = Color.BLACK;
 

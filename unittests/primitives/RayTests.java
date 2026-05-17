@@ -47,6 +47,7 @@ class RayTests {
         // TC11: t est égal à zéro (doit retourner l'origine exacte)
         assertEquals(new Point(1, 1, 1), ray.getPoint(0), "getPoint() pour t = 0 doit retourner l'origine");
     }
+    /** Test for findClosestPoint with various cases (empty, first, middle, last) */
     @Test
     public void testFindClosestPoint() {
         Ray ray = new Ray(new Point(1, 0, 0), new Vector(0, 1, 0));

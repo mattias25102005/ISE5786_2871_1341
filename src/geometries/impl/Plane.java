@@ -12,11 +12,15 @@ import static primitives.Util.*;
  */
 public final class Plane extends Geometry {
 
+    /** A point on the plane */
     private final Point _point;
+    /** Normal vector to the plane */
     private final Vector _normal;
 
     /**
      * Constructs a plane from a point and a normal vector.
+     * @param point a point on the plane
+     * @param normal the normal vector to the plane
      */
     public Plane(final Point point, final Vector normal) {
         this._point = point;
@@ -25,6 +29,9 @@ public final class Plane extends Geometry {
 
     /**
      * Constructs a plane from three points.
+     * @param p1 first point
+     * @param p2 second point
+     * @param p3 third point
      */
     public Plane(final Point p1, final Point p2, final Point p3) {
         this._point = p1;
