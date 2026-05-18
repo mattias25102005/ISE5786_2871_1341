@@ -2,34 +2,18 @@ package lighting;
 
 import primitives.Color;
 
-/**
- * Immutable ambient light used by the scene to provide a base illumination.
- * Ambient light contributes a uniform color/intensity to all surfaces.
- */
-/**
- * Immutable ambient light used by the scene to provide a base illumination.
- * Ambient light contributes a uniform color/intensity to all surfaces.
- */
-public class AmbientLight {
-    /** The ambient intensity (color) provided to the scene. Immutable. */
-    private final Color _intensity;
+public class AmbientLight extends Light {
 
-    /** Constant representing no ambient light (black/zero intensity). */
-    public static final AmbientLight NONE = new AmbientLight(Color.BLACK);
+    // On garde la constante en l'adaptant au constructeur (intensité noire, coefficient 0)
+    public static final AmbientLight NONE = new AmbientLight(Color.BLACK, 0.0);
 
     /**
-     * Create a new AmbientLight with the specified intensity color.
-     * @param intensity ambient color/intensity
+     * Constructeur principal
+     * @param Ia Intensité de base de la couleur
+     * @param ka Coefficient d'atténuation de la lumière ambiante
      */
-    public AmbientLight(Color intensity) {
-        this._intensity = intensity;
-    }
-
-    /**
-     * Return the ambient intensity color.
-     * @return ambient color/intensity
-     */
-    public Color getIntensity() {
-        return _intensity;
+    public AmbientLight(Color Ia, double ka) {
+        // Appelle le constructeur de Light avec Ia * ka
+        super(Ia.scale(ka));
     }
 }
