@@ -1,51 +1,36 @@
-package lighting;
+package renderer;
 
-import org.junit.jupiter.api.Test;
-import primitives.*;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+import lighting.DirectionalLight;
+import primitives.*;
 
 /**
- * Tests unitaires pour la classe DirectionalLight basés sur les principes du cours.
+ * Tests unitaires pour la classe DirectionalLight (Exigence 6).
  */
-public class DirectionalLightTests {
+class DirectionalLightTests {
 
-    /**
-     * Test de la méthode getIntensity pour une lumière directionnelle.
-     * La lumière directionnelle (comme le Soleil) ne s'atténue pas avec la distance,
-     * l'intensité doit être identique en tout point de la scène.
-     */
     @Test
-    public void testGetIntensity() {
-        Color lightColor = new Color(255, 128, 0);
-        Vector direction = new Vector(0, 0, -1);
-        DirectionalLight light = new DirectionalLight(lightColor, direction);
+    void testGetIntensity() {
+        Color intensity = new Color(255, 255, 255);
+        Vector dir = new Vector(0, 0, -1);
+        DirectionalLight light = new DirectionalLight(intensity, dir);
 
-        // On teste sur un point arbitraire de la scène
-        Point p = new Point(10, -50, 300);
-
-        assertEquals(lightColor, light.getIntensity(p),
-                "L'intensité d'une lumière directionnelle doit rester constante et égale à l'intensité d'origine");
+        // L'intensité doit être identique peu importe le point dans la scène
+        assertEquals(intensity, light.getIntensity(new Point(0, 0, 0)),
+                "L'intensité directionnelle doit être constante à l'origine");
+        assertEquals(intensity, light.getIntensity(new Point(100, -50, 20)),
+                "L'intensité directionnelle doit être constante n'importe où");
     }
 
-    /**
-     * Test de la méthode getL pour une lumière directionnelle.
-     * Le vecteur retourné doit pointer du point vers la source de lumière (vecteur inversé).
-     */
     @Test
-    public void testGetL() {
-        Vector initialDirection = new Vector(1, 1, 1);
-        DirectionalLight light = new DirectionalLight(new Color(255, 255, 255), initialDirection);
+    void testGetL() {
+        Vector dir = new Vector(1, 1, 1);
+        DirectionalLight light = new DirectionalLight(new Color(255, 255, 255), dir);
 
-        Point p = new Point(0, 5, -20);
-
-        // CORRECTION : On fait le calcul étape par étape pour aider l'IDE et respecter le framework
-        Vector scaledVector = initialDirection.scale(-1);
-        Vector expectedL = scaledVector.normalize();
-
-        // Le vecteur l doit être normalisé et inversé par rapport à la direction d'émission
-        assertEquals(expectedL, light.getL(p),
-                "Le vecteur getL doit pointer du point vers la lumière (direction d'émission inversée)");
-        assertEquals(1.0, light.getL(p).length(), 0.00001,
-                "Le vecteur getL doit être unitaire (normalisé)");
+        Point p = new Point(5, 5, 5);
+        // getL doit renvoyer la direction normalisée de la lumière (Exigence 7.F)
+        assertEquals(dir.normalize(), light.getL(p),
+                "Le vecteur L doit correspondre à la direction de la lumière normalisée");
     }
 }

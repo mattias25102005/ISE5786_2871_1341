@@ -17,6 +17,7 @@ import primitives.Vector;
 import scene.Scene;
 import primitives.Double3;
 import primitives.Material;
+
 /**
  * Test rendering a basic image
  * @author Dan
@@ -87,44 +88,41 @@ class RenderStage6Tests {
     */
    private static void createImage(Scene scene, String fileName) {
       Camera.getBuilder() //
-         .setResolution(RESOLUTION, RESOLUTION) //
-         .setLocation(Point.ZERO).setDirection(new Point(0, 0, -1), Vector.AXIS_Y) //
-         .setVpDistance(DISTANCE).setVpSize(SIZE, SIZE) //
-         .setRayTracer(scene, RayTracerType.SIMPLE) //
-         .build() //
-         .renderImage() //
-         .printGrid(INTERVAL, new Color(WHITE)) //
-         .writeToImage(fileName);
+              .setResolution(RESOLUTION, RESOLUTION) //
+              .setLocation(Point.ZERO).setDirection(new Point(0, 0, -1), Vector.AXIS_Y) //
+              .setVpDistance(DISTANCE).setVpSize(SIZE, SIZE) //
+              .setRayTracer(scene, RayTracerType.SIMPLE) //
+              .build() //
+              .renderImage() //
+              .printGrid(INTERVAL, new Color(WHITE)) //
+              .writeToImage(fileName);
    }
 
    /**
     * Produce a scene with basic 3D model - including individual emission lights of
-    * the
-    * bodies and render it into a png image with a grid
+    * the bodies and render it into a png image with a grid
     */
    @Test
    void testRenderEmissionColor() {
-      Scene scene = new Scene("Emission color").setAmbientLight(new AmbientLight(new Color(51, 51, 51)));
+      // CORRECTION : Ajout du paramètre coefficient (1.0) pour correspondre au nouveau constructeur d'AmbientLight
+      Scene scene = new Scene("Emission color").setAmbientLight(new AmbientLight(new Color(51, 51, 51), 1.0));
       scene.geometries //
-         .add(_sphere, // no emission
-              _triangleLeftTop.setEmission(new Color(GREEN)),
-              _triangleLeftBottom.setEmission(new Color(RED)),
-              _triangleRightBottom.setEmission(new Color(BLUE)));
+              .add(_sphere, // no emission
+                      _triangleLeftTop.setEmission(new Color(GREEN)),
+                      _triangleLeftBottom.setEmission(new Color(RED)),
+                      _triangleRightBottom.setEmission(new Color(BLUE)));
       createImage(scene, "emission render test");
    }
 
    /**
     * Produce a scene with basic 3D model - including ambient light attenuation
     * factors of the bodies and render it into a png image with a grid.
-    * (IMAGE D43D38 - POINT 5)
     */
    @Test
-   // @Disabled("To be updated and enabled by students") -> Suppression de l'annotation
    void testRenderAmbientColor() {
-      // Création de la scène avec une lumière ambiante blanche
+      // CORRECTION : Utilisation directe du constructeur (Color, double) au lieu du .scale()
       Scene scene = new Scene("Ambient colors")
-
-              .setAmbientLight(new AmbientLight(new Color(WHITE).scale(new Double3(0.5, 0.5, 0.5))));
+              .setAmbientLight(new AmbientLight(new Color(WHITE), 0.5));
 
       scene.geometries.add(
               // La sphère avec un kA de 0.5 (atténuation moyenne)

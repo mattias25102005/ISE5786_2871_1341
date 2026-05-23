@@ -3,6 +3,7 @@ package geometries.api;
 import primitives.Material;
 import primitives.Point;
 import primitives.Ray;
+import primitives.Vector;
 import java.util.List;
 import java.util.Objects;
 
@@ -11,13 +12,10 @@ import java.util.Objects;
  */
 public abstract class Intersectable {
 
-    /**
-     * Default constructor for Intersectable (documented to satisfy Javadoc).
-     */
     protected Intersectable() {}
 
     /**
-     * PDS pour lier une géométrie à un point d'intersection.
+     * PDS pour lier une géométrie à un point d'intersection avec système de cache.
      */
     public static class Intersection {
         /** La géométrie touchée */
@@ -27,17 +25,22 @@ public abstract class Intersectable {
         /** Le matériau de la géométrie au point d'intersection */
         public final Material material;
 
+        // --- CHAMPS DE CACHE GEOMETRIQUE (Partie B - Point 6.א à 6.ד) ---
+        /** Vecteur normal à la surface au point d'intersection */
+        public Vector n;
+        /** Vecteur reliant la caméra/observateur au point d'intersection */
+        public Vector v;
+        /** Vecteur directionnel provenant de la source de lumière courante */
+        public Vector l;
+        /** Produit scalaire utile pour les calculs de diffusion (n . l) */
+        public double nDotL;
+
         /**
-         * Constructeur d'intersection (MODIFIÉ selon l'étape 3.ב)
-         * @param geometry la géométrie intersectée
-         * @param point le point d'intersection
+         * Constructeur d'intersection.
          */
         public Intersection(Geometry geometry, Point point) {
             this.geometry = geometry;
             this.point = point;
-
-            // Logique demandée : si la géométrie est null, on utilise un Material par défaut.
-            // Sinon, on récupère le matériau de la géométrie.
             this.material = (geometry == null) ? new Material() : geometry.getMaterial();
         }
 
@@ -54,27 +57,12 @@ public abstract class Intersectable {
         }
     }
 
-    /**
-     * Méthode NVI - Appelée par le moteur de rendu
-     * @param ray le rayon utilisé pour calculer les intersections
-     * @return liste d'Intersection ou null si aucune intersection
-     */
     public final List<Intersection> calcIntersections(Ray ray) {
         return calcIntersectionsHelper(ray);
     }
 
-    /**
-     * Méthode abstraite à implémenter dans les formes (Sphere, Plane, etc.)
-     * @param ray le rayon à tester
-     * @return liste d'Intersection ou null si aucune
-     */
     protected abstract List<Intersection> calcIntersectionsHelper(Ray ray);
 
-    /**
-     * Retourne uniquement les points d'intersection.
-     * @param ray le rayon à tester
-     * @return liste de points d'intersection ou null si aucune
-     */
     public final List<Point> findIntersections(Ray ray) {
         var intersections = calcIntersections(ray);
         return intersections == null ? null

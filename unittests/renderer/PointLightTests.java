@@ -1,33 +1,40 @@
-package lighting;
+package renderer;
 
-import org.junit.jupiter.api.Test;
-import primitives.*;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+import lighting.PointLight;
+import primitives.*;
 
-public class PointLightTests {
+/**
+ * Tests unitaires pour la classe PointLight (Exigence 6).
+ */
+class PointLightTests {
 
     @Test
-    public void testGetL() {
-        PointLight light = new PointLight(new Color(255, 255, 255), new Point(0, 0, 100));
-        Point target = new Point(0, 0, 0);
+    void testGetIntensity() {
+        Point lightPos = new Point(0, 0, 0);
+        Color baseColor = new Color(120, 120, 120);
 
-        Vector l = light.getL(target);
+        // Configuration avec chaînage : kc = 1, kl = 1, kq = 0
+        PointLight light = new PointLight(baseColor, lightPos).setKl(1);
 
-        // Du point (0,0,0) vers la lumière (0,0,100) -> direction (0,0,1)
-        assertEquals(new Vector(0, 0, 1), l, "Le vecteur getL doit pointer du point vers la lumière");
-        assertEquals(1.0, l.length(), 0.00001, "Le vecteur doit être unitaire");
+        Point target = new Point(0, 0, 2); // Distance d = 2
+        // Facteur d'atténuation = 1 + 1*2 + 0 = 3. Couleur finale attendue = baseColor / 3
+        Color expectedColor = baseColor.reduce(3);
+
+        assertEquals(expectedColor, light.getIntensity(target),
+                "L'intensité avec atténuation par distance linéaire est incorrecte");
     }
 
     @Test
-    public void testGetIntensity() {
-        PointLight light = new PointLight(new Color(500, 500, 500), new Point(0, 0, 100));
-        light.setKl(0.001).setKq(0.0002);
+    void testGetL() {
+        Point lightPos = new Point(0, 0, 0);
+        PointLight light = new PointLight(new Color(255, 255, 255), lightPos);
 
-        Point target = new Point(0, 0, 0); // distance = 100
+        Point target = new Point(0, 5, 0);
+        Vector expectedL = new Vector(0, 1, 0); // Vecteur normalisé allant de (0,0,0) vers (0,5,0)
 
-        // 500 / (1 + 0.001*100 + 0.0002*10000) = 500 / (1 + 0.1 + 2) = 500 / 3.1
-        Color expectedColor = new Color(500, 500, 500).reduce(3.1);
-
-        assertEquals(expectedColor, light.getIntensity(target));
+        assertEquals(expectedL, light.getL(target),
+                "Le vecteur L de la PointLight est incorrect");
     }
 }
