@@ -1,13 +1,14 @@
-
 package scene;
 
 import geometries.impl.Geometries;
 import primitives.Color;
 import lighting.AmbientLight;
-import geometries.api.Geometry;
+import lighting.LightSource;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
- * Scene represents a collection of geometries, background and lighting settings.
+ * Scene représente une collection de geometries, background et lighting settings.
  */
 public class Scene {
     /** The scene name (identifier). */
@@ -22,42 +23,39 @@ public class Scene {
     /** Collection of geometries contained in the scene. */
     public Geometries geometries = new Geometries();
 
+    /** Liste des sources de lumière externes de la scène (Partie B - Point 4) */
+    public List<LightSource> lights = new LinkedList<>();
+
     /**
-     * Create a new scene with the given name. Other properties may be set
-     * using fluent setters.
+     * Create a new scene with the given name.
      * @param name scene identifier
      */
     public Scene(String name) {
         this.name = name;
     }
 
-    /**
-     * Set the scene background color.
-     * @param background background color
-     * @return this Scene for chaining
-     */
     public Scene setBackground(Color background) {
         this.background = background;
         return this;
     }
 
-    /**
-     * Set the ambient light for the scene.
-     * @param ambientLight ambient light intensity and color
-     * @return this Scene for chaining
-     */
     public Scene setAmbientLight(AmbientLight ambientLight) {
         this.ambientLight = ambientLight;
         return this;
     }
 
-    /**
-     * Replace the geometries collection of the scene.
-     * @param geometries collection of geometry objects
-     * @return this Scene for chaining
-     */
     public Scene setGeometries(Geometries geometries) {
         this.geometries = geometries;
+        return this;
+    }
+
+    /**
+     * Configure la liste complète des sources de lumière de la scène (Fluent API).
+     * @param lights liste des sources lumineuses
+     * @return la scène courante
+     */
+    public Scene setLights(List<LightSource> lights) {
+        this.lights = lights;
         return this;
     }
 }

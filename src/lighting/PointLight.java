@@ -4,46 +4,55 @@ import primitives.Color;
 import primitives.Point;
 import primitives.Vector;
 
+/**
+ * Classe représentant une source de lumière ponctuelle (Point Light).
+ */
 public class PointLight extends Light implements LightSource {
-    protected final Point position;
-    protected double kC = 1.0;
-    protected double kL = 0.0;
-    protected double kQ = 0.0;
 
+    private final Point _position;
+
+    // Coefficients d'atténuation initiaux (Exigences 7.A & 7.B)
+    private double _kC = 1.0;
+    private double _kL = 0.0;
+    private double _kQ = 0.0;
+
+    /**
+     * Constructeur pour la lumière ponctuelle.
+     * @param intensity L'intensité d'origine de la lumière
+     * @param position La position de la lumière
+     */
     public PointLight(Color intensity, Point position) {
         super(intensity);
-        this.position = position;
+        this._position = position;
     }
 
+    // Méthodes de chaînage / Fluent API (Exigence 7.D)
     public PointLight setKc(double kC) {
-        this.kC = kC;
+        this._kC = kC;
         return this;
     }
 
     public PointLight setKl(double kL) {
-        this.kL = kL;
+        this._kL = kL;
         return this;
     }
 
     public PointLight setKq(double kQ) {
-        this.kQ = kQ;
+        this._kQ = kQ;
         return this;
     }
 
     @Override
     public Color getIntensity(Point p) {
-        double d = position.distance(p);
-        double attenuation = kC + kL * d + kQ * d * d;
-
-        // Sécurité pour éviter une division par zéro (cas théorique limite)
-        if (attenuation == 0) return getIntensity();
-
-        // CORRECTION : On utilise .scale(1.0 / attenuation) à la place de reduce
-        return getIntensity().scale(1.0 / attenuation);
+        double d = _position.distance(p);
+        // Formule d'atténuation : I_0 / (kc + kl*d + kq*d^2)
+        double factor = _kC + _kL * d + _kQ * d * d;
+        return getIntensity().reduce((int) factor);
     }
 
     @Override
     public Vector getL(Point p) {
-        return position.subtract(p).normalize();
+        // Le vecteur allant de la source vers le point p, normalisé
+        return p.subtract(_position).normalize();
     }
 }

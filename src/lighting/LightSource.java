@@ -1,26 +1,25 @@
 package lighting;
 
 import primitives.Color;
-import primitives.Vector;
 import primitives.Point;
+import primitives.Vector;
 
 /**
- * Interface représentant une source de lumière dans la scène.
+ * Interface représentant une source de lumière externe dans la scène.
  */
 public interface LightSource {
 
     /**
-     * Calcule et retourne l'intensité de la lumière qui atteint un point spécifique.
-     * * @param p Le point de la scène qui reçoit la lumière
-     * @return La couleur (intensité) de la lumière sur ce point
+     * Calcule et retourne l'intensité de la lumière qui atteint le point p.
+     * @param p Le point éclairé
+     * @return L'intensité sous forme de Color
      */
-    Color getIntensity(Point p);
+    public Color getIntensity(Point p);
 
     /**
-     * Calcule et retourne le vecteur directionnel normalisé de la lumière
-     * arrivant sur un point spécifique.
-     * * @param p Le point éclairé
-     * @return Le vecteur directionnel unitaire (de la source vers le point)
+     * Calcule et retourne le vecteur direction de la lumière arrivant sur le point p (normalisé).
+     * @param p Le point éclairé
+     * @return Le vecteur direction normalisé (L)
      */
-    Vector getL(Point p);
+    public Vector getL(Point p);
 }

@@ -4,17 +4,32 @@ import primitives.Color;
 import primitives.Point;
 import primitives.Vector;
 
+/**
+ * Classe représentant un projecteur (Spot Light), héritant de PointLight.
+ */
 public class SpotLight extends PointLight {
-    private final Vector direction;
-    private int narrowBeam = 1;
 
+    private final Vector _direction;
+    private double _narrowBeam = 1.0; // Exposant par défaut pour le faisceau
+
+    /**
+     * Constructeur pour le projecteur.
+     * @param intensity L'intensité d'origine
+     * @param position La position du spot
+     * @param direction La direction du faisceau (sera normalisée)
+     */
     public SpotLight(Color intensity, Point position, Vector direction) {
         super(intensity, position);
-        this.direction = direction.normalize();
+        this._direction = direction.normalize();
     }
 
-    public SpotLight setNarrowBeam(int narrowBeam) {
-        this.narrowBeam = narrowBeam;
+    /**
+     * Définit l'exposant de concentration du faisceau (Bonus/Sharp Spot).
+     * @param narrowBeam exposant de concentration
+     * @return ce SpotLight pour le chaînage
+     */
+    public SpotLight setNarrowBeam(double narrowBeam) {
+        this._narrowBeam = narrowBeam;
         return this;
     }
 
@@ -38,22 +53,16 @@ public class SpotLight extends PointLight {
 
     @Override
     public Color getIntensity(Point p) {
-        // Appelle l'intensité de base calculée par PointLight (déjà atténuée par la distance)
-        Color pointLightIntensity = super.getIntensity(p);
+        Vector l = getL(p);
+        double dirL = _direction.dotProduct(l);
 
-        // Direction de la source vers le point p
-        Vector emissionDir = getL(p).scale(-1);
-
-        double dirDotL = direction.dotProduct(emissionDir);
-
-        if (dirDotL <= 0) {
+        // Si le point est en dehors du cône d'éclairage
+        if (dirL <= 0) {
             return Color.BLACK;
         }
 
-        if (narrowBeam > 1) {
-            dirDotL = Math.pow(dirDotL, narrowBeam);
-        }
-
-        return pointLightIntensity.scale(dirDotL);
+        // Modèle de Phong étendu : atténuation de distance * (dir . l)^narrowBeam
+        double factor = Math.pow(dirL, _narrowBeam);
+        return super.getIntensity(p).scale(factor);
     }
 }

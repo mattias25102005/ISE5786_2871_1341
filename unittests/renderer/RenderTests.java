@@ -64,9 +64,10 @@ class RenderTests {
      */
     @Test
     void testBasicRenderTwoColors() {
+        // CORRECTION : Ajout du paramètre coefficient (1.0) pour correspondre au nouveau constructeur d'AmbientLight
         Scene        scene  = new Scene("Two colors")                   //
                 .setBackground(new Color(75, 127, 90))                       //
-                .setAmbientLight(new AmbientLight(new Color(10, 191, 55)));
+                .setAmbientLight(new AmbientLight(new Color(10, 191, 55), 1.0));
 
         final double Z      = -100D;
         // Left, Middle, Right X Bottom, Middle, Top
@@ -156,5 +157,4 @@ class RenderTests {
                 .writeToImage("render test json");
 
     }
-
 }

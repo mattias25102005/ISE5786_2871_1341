@@ -15,7 +15,7 @@ import primitives.*;
 import scene.Scene;
 
 /**
- * Test rendering a basic image
+ * Test rendering a basic image with lighting models.
  * @author Dan Zilberstein
  */
 class LightsTests {
@@ -27,23 +27,26 @@ class LightsTests {
 
    /** First scene for some of tests */
    private final Scene           _scene1                   = new Scene("Test scene");
-   /** Second scene for some of tests */
+
+   /** * Second scene for some of tests
+    * CORRECTION : Passage de deux paramètres au constructeur d'AmbientLight (Color, double)
+    */
    private final Scene           _scene2                   = new Scene("Test scene")
-      .setAmbientLight(new AmbientLight(new Color(38, 38, 38)));
+           .setAmbientLight(new AmbientLight(new Color(38, 38, 38), 1.0));
 
    /** First camera builder for some of tests */
    private final Camera.Builder  _camera1                  = Camera.getBuilder()                                //
-      .setRayTracer(_scene1, RayTracerType.SIMPLE)                                                              //
-      .setLocation(new Point(0, 0, 1000))                                                                       //
-      .setDirection(Point.ZERO, Vector.AXIS_Y)                                                                  //
-      .setVpSize(150, 150).setVpDistance(1000);
+           .setRayTracer(_scene1, RayTracerType.SIMPLE)                                                              //
+           .setLocation(new Point(0, 0, 1000))                                                                       //
+           .setDirection(Point.ZERO, Vector.AXIS_Y)                                                                  //
+           .setVpSize(150, 150).setVpDistance(1000);
 
    /** Second camera builder for some of tests */
    private final Camera.Builder  _camera2                  = Camera.getBuilder()                                //
-      .setRayTracer(_scene2, RayTracerType.SIMPLE)                                                              //
-      .setLocation(new Point(0, 0, 1000))                                                                       //
-      .setDirection(Point.ZERO, Vector.AXIS_Y)                                                                  //
-      .setVpSize(200, 200).setVpDistance(1000);
+           .setRayTracer(_scene2, RayTracerType.SIMPLE)                                                              //
+           .setLocation(new Point(0, 0, 1000))                                                                       //
+           .setDirection(Point.ZERO, Vector.AXIS_Y)                                                                  //
+           .setVpSize(200, 200).setVpDistance(1000);
 
    /** Shininess value for most of the geometries in the tests */
    private static final int      SHININESS                 = 301;
@@ -59,7 +62,7 @@ class LightsTests {
 
    /** Material for some of the geometries in the tests */
    private static final Material MATERIAL                  = new Material().setKD(KD3).setKS(KS3)
-      .setShininess(SHININESS);
+           .setShininess(SHININESS);
    /** Light color for tests with triangles */
    private static final Color    TRIANGLES_LIGHT_COLOR     = new Color(800, 500, 250);
    /** Light color for tests with sphere */
@@ -74,16 +77,16 @@ class LightsTests {
 
    /** The triangles' vertices for the tests with triangles */
    private static final Point[]  VERTICES                  =
-      {
-        // the shared left-bottom:
-        new Point(-110, -110, -150),
-        // the shared right-top:
-        new Point(95, 100, -150),
-        // the right-bottom
-        new Point(110, -110, -150),
-        // the left-top
-        new Point(-75, 78, 100)
-      };
+           {
+                   // the shared left-bottom:
+                   new Point(-110, -110, -150),
+                   // the shared right-top:
+                   new Point(95, 100, -150),
+                   // the right-bottom
+                   new Point(110, -110, -150),
+                   // the left-top
+                   new Point(-75, 78, 100)
+           };
    /** Position of the light in tests with sphere */
    private static final Point    SPHERE_LIGHT_POSITION     = new Point(-50, -50, 25);
    /** Light direction (directional and spot) in tests with sphere */
@@ -95,13 +98,13 @@ class LightsTests {
 
    /** The sphere in appropriate tests */
    private static final Geometry SPHERE                    = new Sphere(SPHERE_CENTER, SPHERE_RADIUS)
-      .setEmission(SPHERE_COLOR).setMaterial(new Material().setKD(KD).setKS(KS).setShininess(SHININESS));
+           .setEmission(SPHERE_COLOR).setMaterial(new Material().setKD(KD).setKS(KS).setShininess(SHININESS));
    /** The first triangle in appropriate tests */
    private static final Geometry TRIANGLE1                 = new Triangle(VERTICES[0], VERTICES[1], VERTICES[2])
-      .setMaterial(MATERIAL);
+           .setMaterial(MATERIAL);
    /** The first triangle in appropriate tests */
    private static final Geometry TRIANGLE2                 = new Triangle(VERTICES[0], VERTICES[1], VERTICES[3])
-      .setMaterial(MATERIAL);
+           .setMaterial(MATERIAL);
 
    /** Produce a picture of a sphere lighted by a directional light */
    @Test
@@ -110,10 +113,10 @@ class LightsTests {
       _scene1.lights.add(new DirectionalLight(SPHERE_LIGHT_COLOR, SPHERE_LIGHT_DIRECTION));
 
       _camera1 //
-         .setResolution(RESOLUTION, RESOLUTION) //
-         .build() //
-         .renderImage() //
-         .writeToImage("lightSphereDirectional");
+              .setResolution(RESOLUTION, RESOLUTION) //
+              .build() //
+              .renderImage() //
+              .writeToImage("lightSphereDirectional");
    }
 
    /** Produce a picture of a sphere lighted by a point light */
@@ -122,13 +125,13 @@ class LightsTests {
    void testSpherePoint() {
       _scene1.geometries.add(SPHERE);
       _scene1.lights.add(new PointLight(SPHERE_LIGHT_COLOR, SPHERE_LIGHT_POSITION) //
-         .setKl(0.001).setKq(0.0002));
+              .setKl(0.001).setKq(0.0002));
 
       _camera1 //
-         .setResolution(500, 500) //
-         .build() //
-         .renderImage() //
-         .writeToImage("lightSpherePoint");
+              .setResolution(500, 500) //
+              .build() //
+              .renderImage() //
+              .writeToImage("lightSpherePoint");
    }
 
    /** Produce a picture of a sphere lighted by a spotlight */
@@ -137,13 +140,13 @@ class LightsTests {
    void testSphereSpot() {
       _scene1.geometries.add(SPHERE);
       _scene1.lights.add(new SpotLight(SPHERE_LIGHT_COLOR, SPHERE_LIGHT_POSITION, SPHERE_LIGHT_DIRECTION) //
-         .setKl(0.001).setKq(0.0001));
+              .setKl(0.001).setKq(0.0001));
 
       _camera1 //
-         .setResolution(RESOLUTION, RESOLUTION) //
-         .build() //
-         .renderImage() //
-         .writeToImage("lightSphereSpot");
+              .setResolution(RESOLUTION, RESOLUTION) //
+              .build() //
+              .renderImage() //
+              .writeToImage("lightSphereSpot");
    }
 
    /** Produce a picture of two triangles lighted by a directional light */
@@ -153,9 +156,9 @@ class LightsTests {
       _scene2.lights.add(new DirectionalLight(TRIANGLES_LIGHT_COLOR, TRIANGLES_LIGHT_DIRECTION));
 
       _camera2.setResolution(RESOLUTION, RESOLUTION) //
-         .build() //
-         .renderImage() //
-         .writeToImage("lightTrianglesDirectional");
+              .build() //
+              .renderImage() //
+              .writeToImage("lightTrianglesDirectional");
    }
 
    /** Produce a picture of two triangles lighted by a point light */
@@ -164,12 +167,12 @@ class LightsTests {
    void testTrianglesPoint() {
       _scene2.geometries.add(TRIANGLE1, TRIANGLE2);
       _scene2.lights.add(new PointLight(TRIANGLES_LIGHT_COLOR, TRIANGLES_LIGHT_POSITION) //
-         .setKl(0.001).setKq(0.0002));
+              .setKl(0.001).setKq(0.0002));
 
       _camera2.setResolution(500, 500) //
-         .build() //
-         .renderImage() //
-         .writeToImage("lightTrianglesPoint");
+              .build() //
+              .renderImage() //
+              .writeToImage("lightTrianglesPoint");
    }
 
    /** Produce a picture of two triangles lighted by a spotlight */
@@ -178,12 +181,12 @@ class LightsTests {
    void testTrianglesSpot() {
       _scene2.geometries.add(TRIANGLE1, TRIANGLE2);
       _scene2.lights.add(new SpotLight(TRIANGLES_LIGHT_COLOR, TRIANGLES_LIGHT_POSITION, TRIANGLES_LIGHT_DIRECTION) //
-         .setKl(0.001).setKq(0.0001));
+              .setKl(0.001).setKq(0.0001));
 
       _camera2.setResolution(500, 500) //
-         .build() //
-         .renderImage() //
-         .writeToImage("lightTrianglesSpot");
+              .build() //
+              .renderImage() //
+              .writeToImage("lightTrianglesSpot");
    }
 
    /** Produce a picture of a sphere lighted by a narrow spotlight */
@@ -192,13 +195,13 @@ class LightsTests {
    void testSphereSpotSharp() {
       _scene1.geometries.add(SPHERE);
       _scene1.lights
-         .add(new SpotLight(SPHERE_LIGHT_COLOR, SPHERE_LIGHT_POSITION, new Vector(1, 1, -0.5)) //
-            .setKl(0.001).setKq(0.00004).setNarrowBeam(10));
+              .add(new SpotLight(SPHERE_LIGHT_COLOR, SPHERE_LIGHT_POSITION, new Vector(1, 1, -0.5)) //
+                      .setKl(0.001).setKq(0.00004).setNarrowBeam(10));
 
       _camera1.setResolution(500, 500) //
-         .build() //
-         .renderImage() //
-         .writeToImage("lightSphereSpotSharp");
+              .build() //
+              .renderImage() //
+              .writeToImage("lightSphereSpotSharp");
    }
 
    /** Produce a picture of two triangles lighted by a narrow spotlight */
@@ -207,12 +210,53 @@ class LightsTests {
    void testTrianglesSpotSharp() {
       _scene2.geometries.add(TRIANGLE1, TRIANGLE2);
       _scene2.lights.add(new SpotLight(TRIANGLES_LIGHT_COLOR, TRIANGLES_LIGHT_POSITION, TRIANGLES_LIGHT_DIRECTION) //
-         .setKl(0.001).setKq(0.00004).setNarrowBeam(10));
+              .setKl(0.001).setKq(0.00004).setNarrowBeam(10));
 
       _camera2.setResolution(500, 500) //
-         .build() //
-         .renderImage() //
-         .writeToImage("lightTrianglesSpotSharp");
+              .build() //
+              .renderImage() //
+              .writeToImage("lightTrianglesSpotSharp");
    }
 
+   /** * [NOUVEAU TEST] Partie B - Point 8 : Multi-éclairage sur la Sphère.
+    * Combine tous les types de sources lumineuses avec des positions, couleurs et directions différentes.
+    */
+   @Test
+   void testSphereMultiLights() {
+      _scene1.geometries.add(SPHERE);
+
+      // Combinaison asymétrique : Directionnelle verte, Ponctuelle rouge/rose, et Spot bleue
+      _scene1.lights.add(new DirectionalLight(new Color(200, 400, 200), new Vector(1, -1, -1)));
+      _scene1.lights.add(new PointLight(new Color(600, 300, 300), new Point(60, 60, 50))
+              .setKl(0.001).setKq(0.0002));
+      _scene1.lights.add(new SpotLight(new Color(300, 300, 700), new Point(-60, -60, 50), new Vector(1, 1, -2))
+              .setKl(0.002).setKq(0.0001));
+
+      _camera1
+              .setResolution(RESOLUTION, RESOLUTION)
+              .build()
+              .renderImage()
+              .writeToImage("lightSphereMulti");
+   }
+
+   /** * [NOUVEAU TEST] Partie B - Point 8 : Multi-éclairage sur les deux Triangles.
+    * Combine plusieurs sources de lumières équilibrées pour éviter les zones saturées.
+    */
+   @Test
+   void testTrianglesMultiLights() {
+      _scene2.geometries.add(TRIANGLE1, TRIANGLE2);
+
+      // Combinaison asymétrique : Directionnelle blanche diffuse, Ponctuelle jaune, et Spot cyan
+      _scene2.lights.add(new DirectionalLight(new Color(250, 150, 150), new Vector(0, -1, -0.5)));
+      _scene2.lights.add(new PointLight(new Color(400, 400, 200), new Point(-50, -50, -120))
+              .setKl(0.0005).setKq(0.0001));
+      _scene2.lights.add(new SpotLight(new Color(150, 350, 550), new Point(40, 20, -80), new Vector(-1, -1, -1))
+              .setKl(0.001).setKq(0.0002));
+
+      _camera2
+              .setResolution(RESOLUTION, RESOLUTION)
+              .build()
+              .renderImage()
+              .writeToImage("lightTrianglesMulti");
+   }
 }
