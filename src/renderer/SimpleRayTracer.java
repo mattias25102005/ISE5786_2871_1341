@@ -6,7 +6,7 @@ import primitives.*;
 import scene.Scene;
 
 /**
- * Simple ray tracer implementation incorporating Phong Reflection Model.
+ * Traceur de rayons simple utilisant le modèle de réflexion de Phong.
  */
 public class SimpleRayTracer extends RayTracerBase {
 
@@ -14,6 +14,9 @@ public class SimpleRayTracer extends RayTracerBase {
         super(scene);
     }
 
+    /**
+     * Point d'entrée : trouve l'intersection visible la plus proche et calcule sa couleur.
+     */
     @Override
     public Color traceRay(Ray ray) {
         var intersections = _scene.geometries.calcIntersections(ray);
@@ -26,73 +29,68 @@ public class SimpleRayTracer extends RayTracerBase {
     }
 
     /**
-     * Calcule la couleur globale combinant l'ambiant, l'émission et les effets locaux de Phong.
+     * Calcule la couleur globale (Ambiante + Émission + Effets locaux) après validation du cache.
      */
     private Color calcColor(Intersection intersection, Ray ray) {
-        return _scene.ambientLight.getIntensity().scale(intersection.material.kA)
+        return !preprocessIntersection(intersection, ray) ? Color.BLACK
+                : _scene.ambientLight.getIntensity().scale(intersection.material.kA)
                 .add(intersection.geometry.getEmission())
-                .add(calcColorLocalEffects(intersection, ray));
+                .add(calcLocalEffects(intersection));
     }
 
     /**
-     * Calcule et accumule les effets d'éclairage locaux de toutes les sources lumineuses.
+     * Accumule les effets diffus et spéculaires de toutes les sources lumineuses de la scène.
      */
-    private Color calcColorLocalEffects(Intersection intersection, Ray ray) {
-        // Étape 1 : Initialiser le cache primaire lié à la géométrie de l'intersection
-        preprocessIntersection(intersection, ray);
-
+    private Color calcLocalEffects(Intersection intersection) {
         Color color = Color.BLACK;
-        Vector v = intersection.v;
-        Vector n = intersection.n;
+        double vNormal = intersection.vNormal;
 
-        // Étape 2 : Boucler sur l'ensemble des sources lumineuses de la scène
         for (LightSource lightSource : _scene.lights) {
-            // Initialiser le cache secondaire lié à la source de lumière actuelle
-            preprocessLightSource(intersection, lightSource);
-            double nDotL = intersection.nDotL;
-            double nDotV = n.dotProduct(v);
+            if (preprocessLightSource(intersection, lightSource)) {
+                double lNormal = intersection.lNormal;
 
-            // Condition du modèle de Phong : la lumière et la caméra doivent être du même côté de la surface
-            if (nDotL * nDotV > 0) {
-                Color lightIntensity = lightSource.getIntensity(intersection.point);
+                // Condition géométrique : caméra et lumière du même côté de la surface
+                if (lNormal * vNormal > 0) {
+                    Color lightIntensity = lightSource.getIntensity(intersection.point);
 
-                // Accumulation de l'apport Diffuse + Spéculaire
-                color = color.add(
-                        lightIntensity.scale(calcDiffuse(intersection)),
-                        lightIntensity.scale(calcSpecular(intersection))
-                );
+                    color = color.add(
+                            lightIntensity.scale(calcDiffuse(intersection)),
+                            lightIntensity.scale(calcSpecular(intersection))
+                    );
+                }
             }
         }
         return color;
     }
 
     /**
-     * Calcule le coefficient de réflexion diffuse en utilisant les données du cache.
+     * Calcule la réflexion diffuse (Aspect mat - Loi de Lambert) via les données en cache.
      */
     private Double3 calcDiffuse(Intersection intersection) {
-        double factor = Math.abs(intersection.nDotL);
+        double factor = Math.abs(intersection.lNormal);
         return intersection.material.kD.scale(factor);
     }
 
     /**
-     * Calcule le coefficient de réflexion spéculaire en utilisant les données du cache.
+     * Calcule la réflexion spéculaire (Aspect brillant - Modèle de Phong).
      */
     private Double3 calcSpecular(Intersection intersection) {
         Vector l = intersection.l;
-        Vector n = intersection.n;
+        Vector n = intersection.normal;
         Vector v = intersection.v;
-        double nDotL = intersection.nDotL;
+        double lNormal = intersection.lNormal;
 
-        // r = l - 2 * (l . n) * n (Vecteur de réflexion parfait)
-        Vector r = l.subtract(n.scale(2 * nDotL)).normalize();
+        // Vecteur de réflexion parfaite : r = l - 2 * (l . n) * n
+        Vector r = l.subtract(n.scale(2 * lNormal));
 
-        // Le reflet dépend de l'alignement entre le vecteur de vue (v) et le reflet (r)
+        // Calcul de l'intensité du reflet selon l'angle de vue (-v . r)
         double minusVR = -v.dotProduct(r);
 
         if (minusVR <= 0) {
             return Double3.ZERO;
         }
 
+        // Concentration du reflet avec l'exposant de brillance (nShininess)
         double factor = Math.pow(minusVR, intersection.material.nShininess);
         return intersection.material.kS.scale(factor);
     }

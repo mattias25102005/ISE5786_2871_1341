@@ -4,6 +4,7 @@ import primitives.Material;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
+import lighting.LightSource; // Assure-toi que l'import est présent pour LightSource
 import java.util.List;
 import java.util.Objects;
 
@@ -25,15 +26,13 @@ public abstract class Intersectable {
         /** Le matériau de la géométrie au point d'intersection */
         public final Material material;
 
-        // --- CHAMPS DE CACHE GEOMETRIQUE (Partie B - Point 6.א à 6.ד) ---
-        /** Vecteur normal à la surface au point d'intersection */
-        public Vector n;
-        /** Vecteur reliant la caméra/observateur au point d'intersection */
+        // --- CHAMPS DE CACHE GEOMETRIQUE ET LUMIÈRE (Mis à jour selon l'énoncé) ---
+        public Vector normal;
         public Vector v;
-        /** Vecteur directionnel provenant de la source de lumière courante */
+        public double vNormal;
+        public LightSource light;
         public Vector l;
-        /** Produit scalaire utile pour les calculs de diffusion (n . l) */
-        public double nDotL;
+        public double lNormal;
 
         /**
          * Constructeur d'intersection.
