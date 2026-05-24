@@ -31,6 +31,29 @@ public class Ray {
     }
 
     /**
+     * NOUVEAU CONSTRUCTEUR (Point 4)
+     * Construit un rayon en décalant son origine de la surface pour éviter l'auto-intersection.
+     *
+     * @param head      L'origine brute sur la surface géométrique
+     * @param direction La direction du rayon (va être normalisée)
+     * @param normal    Le vecteur normal à la surface au point d'origine
+     */
+    public Ray(Point head, Vector direction, Vector normal) {
+        this._direction = direction.normalize();
+
+        // Reprise exacte de la constante et de la logique de décalage demandée (Point 4)
+        double DELTA = 0.1;
+        double nv = normal.dotProduct(this._direction);
+
+        if (Util.isZero(nv)) {
+            this._origin = head;
+        } else {
+            Vector deltaVector = normal.scale(nv > 0 ? DELTA : -DELTA);
+            this._origin = head.add(deltaVector);
+        }
+    }
+
+    /**
      * Returns the origin point of the ray.
      *
      * @return origin point

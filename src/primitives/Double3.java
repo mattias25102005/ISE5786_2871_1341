@@ -1,6 +1,5 @@
 /**
- * 
- */
+ * */
 package primitives;
 
 import static primitives.Util.isZero;
@@ -43,15 +42,15 @@ public record Double3(double _d1, double _d2, double _d3) {
     * Checks if this triad is equal to another object.
     * @param obj the object to compare with
     * @return {@code true} if the object is a Double3 triad with
-    *         components nearly equal to this triad's components
+    * components nearly equal to this triad's components
     */
    @Override
    public boolean equals(Object obj) {
       return this == obj
-            || (obj instanceof Double3(double od1, double od2, double od3))
-                  && isZero(_d1 - od1)
-                  && isZero(_d2 - od2)
-                  && isZero(_d3 - od3);
+              || (obj instanceof Double3(double od1, double od2, double od3))
+              && isZero(_d1 - od1)
+              && isZero(_d2 - od2)
+              && isZero(_d3 - od3);
    }
 
    /**
@@ -115,7 +114,23 @@ public record Double3(double _d1, double _d2, double _d3) {
     * corresponding components of another triad.
     * @param  other the triad to compare with
     * @return       {@code true} if each component of this triad is smaller than
-    *               the corresponding component in {@code other}
+    * the corresponding component in {@code other}
     */
    public boolean isLowerThan(Double3 other) { return _d1 < other._d1 && _d2 < other._d2 && _d3 < other._d3; }
+
+   /**
+    * Checks whether all components are strictly greater than a given scalar value (Partie 3 - Point 6).
+    * @param  k the scalar value to compare against
+    * @return   {@code true} if all components are strictly greater than {@code k}
+    */
+   public boolean isGreaterThan(double k) { return _d1 > k && _d2 > k && _d3 > k; }
+
+   /**
+    * Checks whether all components of this triad are strictly greater than the
+    * corresponding components of another triad (Partie 3 - Point 6).
+    * @param  other the triad to compare with
+    * @return       {@code true} if each component of this triad is strictly greater than
+    * the corresponding component in {@code other}
+    */
+   public boolean isGreaterThan(Double3 other) { return _d1 > other._d1 && _d2 > other._d2 && _d3 > other._d3; }
 }

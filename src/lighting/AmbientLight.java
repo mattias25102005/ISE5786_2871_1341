@@ -19,4 +19,13 @@ public class AmbientLight extends Light {
         // Appelle le constructeur de Light avec Ia * ka
         super(Ia.scale(ka));
     }
+
+    /**
+     * NOUVEAU CONSTRUCTEUR (Surcharge pour la compatibilité avec les tests du prof)
+     * Permet de créer une lumière ambiante avec un coefficient ka par défaut à 1.0
+     * @param Ia Intensité de la couleur
+     */
+    public AmbientLight(Color Ia) {
+        super(Ia); // Équivaut à Ia.scale(1.0)
+    }
 }
