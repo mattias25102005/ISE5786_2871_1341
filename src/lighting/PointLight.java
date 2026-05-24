@@ -67,9 +67,16 @@ public class PointLight extends Light implements LightSource {
     @Override
     public Color getIntensity(Point p) {
         double d = _position.distance(p);
-        // Formule d'atténuation : I_0 / (kc + kl*d + kq*d^2)
+        // Formule d'atténuation : kc + kl*d + kq*d^2
         double factor = _kC + _kL * d + _kQ * d * d;
-        return getIntensity().reduce((int) factor);
+
+        // Sécurité pour éviter une division par zéro ou une valeur négative
+        if (factor <= 0) {
+            return getIntensity();
+        }
+
+        // CORRECTION : Utilisation de scale avec 1/factor en double (pas de cast int)
+        return getIntensity().scale(1.0 / factor);
     }
 
     /**
@@ -79,11 +86,11 @@ public class PointLight extends Light implements LightSource {
      */
     @Override
     public Vector getL(Point p) {
-        // Le vecteur allant de la source vers le point p, normalisé
         return p.subtract(_position).normalize();
     }
+
     @Override
     public double getDistance(Point point) {
-        return _position.distance(point); // Calcule la distance réelle entre la lampe et le point
+        return _position.distance(point);
     }
 }

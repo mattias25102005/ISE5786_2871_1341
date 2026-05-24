@@ -13,6 +13,12 @@ public class Material {
     /** Coefficient de réflexion spéculaire (Partie B - Point 5.א) */
     public Double3 kS = Double3.ZERO;
 
+    /** Coefficient de transparence (Partie 2 - Point 1) */
+    public Double3 kT = Double3.ZERO;
+
+    /** Coefficient de réflexion globale / miroir (Partie 2 - Point 1) */
+    public Double3 kR = Double3.ZERO;
+
     /** Exposant de brillance/polissage (Partie B - Point 5.א) */
     public int nShininess = 0;
 
@@ -78,6 +84,48 @@ public class Material {
      */
     public Material setKS(double kS) {
         this.kS = new Double3(kS);
+        return this;
+    }
+
+    // --- Configuration Transparence (kT) (Partie 2 - Point 1.ב) ---
+    /**
+     * Définit le coefficient de transparence (Double3).
+     * @param kT coefficient de transparence (Double3)
+     * @return this pour chaînage
+     */
+    public Material setKT(Double3 kT) {
+        this.kT = kT;
+        return this;
+    }
+
+    /**
+     * Définit le coefficient de transparence (valeur scalaire).
+     * @param kT coefficient de transparence (double)
+     * @return this pour chaînage
+     */
+    public Material setKT(double kT) {
+        this.kT = new Double3(kT);
+        return this;
+    }
+
+    // --- Configuration Réflexion / Miroir (kR) (Partie 2 - Point 1.ב) ---
+    /**
+     * Définit le coefficient de réflexion (Double3).
+     * @param kR coefficient de réflexion (Double3)
+     * @return this pour chaînage
+     */
+    public Material setKR(Double3 kR) {
+        this.kR = kR;
+        return this;
+    }
+
+    /**
+     * Définit le coefficient de réflexion (valeur scalaire).
+     * @param kR coefficient de réflexion (double)
+     * @return this pour chaînage
+     */
+    public Material setKR(double kR) {
+        this.kR = new Double3(kR);
         return this;
     }
 

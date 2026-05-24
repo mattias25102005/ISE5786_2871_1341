@@ -58,14 +58,15 @@ public class SpotLight extends PointLight {
         Vector l = getL(p);
         double dirL = _direction.dotProduct(l);
 
-        // Si le point est en dehors du cône d'éclairage
+        // Si le point est en dehors ou derrière le cône d'éclairage du spot
         if (dirL <= 0) {
             return Color.BLACK;
         }
 
-        // Modèle de Phong étendu : atténuation de distance * (dir . l)^narrowBeam
+        // Modèle de Phong étendu : (dir . l)^narrowBeam
         double factor = Math.pow(dirL, _narrowBeam);
+
+        // Multiplie l'intensité atténuée par la distance (via PointLight) par le facteur du spot
         return super.getIntensity(p).scale(factor);
     }
-
 }
