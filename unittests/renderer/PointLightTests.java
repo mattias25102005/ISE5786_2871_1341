@@ -9,7 +9,14 @@ import primitives.*;
  * Tests unitaires pour la classe PointLight (Exigence 6).
  */
 class PointLightTests {
+    /**
+     * Constructeur par défaut pour la classe de tests (évite l'avertissement Javadoc).
+     */
+    PointLightTests() {}
 
+    /**
+     * Teste l'atténuation d'une PointLight en fonction de la distance.
+     */
     @Test
     void testGetIntensity() {
         Point lightPos = new Point(0, 0, 0);
@@ -26,6 +33,9 @@ class PointLightTests {
                 "L'intensité avec atténuation par distance linéaire est incorrecte");
     }
 
+    /**
+     * Vérifie que getL renvoie le vecteur normalisé de la source vers le point.
+     */
     @Test
     void testGetL() {
         Point lightPos = new Point(0, 0, 0);

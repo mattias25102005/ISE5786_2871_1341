@@ -2,9 +2,12 @@ package lighting;
 
 import primitives.Color;
 
+/**
+ * Lumière ambiante : éclaire uniformément la scène sans direction.
+ */
 public class AmbientLight extends Light {
 
-    // On garde la constante en l'adaptant au constructeur (intensité noire, coefficient 0)
+    /** Lumière ambiante nulle (intensité noire, coefficient 0) */
     public static final AmbientLight NONE = new AmbientLight(Color.BLACK, 0.0);
 
     /**

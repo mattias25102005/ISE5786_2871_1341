@@ -13,6 +13,10 @@ import java.util.Objects;
  */
 public abstract class Intersectable {
 
+    /**
+     * Constructeur protégé pour Intersectable. Les implémentations concrètes
+     * appelleront ce constructeur lors de l'instanciation.
+     */
     protected Intersectable() {}
 
     /**
@@ -27,15 +31,23 @@ public abstract class Intersectable {
         public final Material material;
 
         // --- CHAMPS DE CACHE GEOMETRIQUE ET LUMIÈRE (Mis à jour selon l'énoncé) ---
+        /** normale en ce point (mise en cache) */
         public Vector normal;
+        /** vecteur direction du rayon incident (mise en cache) */
         public Vector v;
+        /** produit scalaire entre v et la normale (mise en cache) */
         public double vNormal;
+        /** source lumineuse courante (mise en cache) */
         public LightSource light;
+        /** vecteur L (direction lumière -> point) mis en cache */
         public Vector l;
+        /** produit scalaire entre l et la normale (mise en cache) */
         public double lNormal;
 
         /**
-         * Constructeur d'intersection.
+         * Constructeur d'intersection reliant une géométrie et un point.
+         * @param geometry la géométrie touchée
+         * @param point le point d'intersection
          */
         public Intersection(Geometry geometry, Point point) {
             this.geometry = geometry;
@@ -56,12 +68,27 @@ public abstract class Intersectable {
         }
     }
 
+    /**
+     * Calcule toutes les intersections (avec informations complètes) pour un rayon donné.
+     * @param ray le rayon d'intersection
+     * @return liste d'Intersection ou null s'il n'y a pas d'intersection
+     */
     public final List<Intersection> calcIntersections(Ray ray) {
         return calcIntersectionsHelper(ray);
     }
 
+    /**
+     * Implémentation spécifique par la géométrie pour calculer les intersections.
+     * @param ray le rayon à tester
+     * @return liste d'intersections (implémentation spécifique)
+     */
     protected abstract List<Intersection> calcIntersectionsHelper(Ray ray);
 
+    /**
+     * Retourne uniquement les points d'intersection (projection des Intersection).
+     * @param ray le rayon testé
+     * @return liste de points ou null si aucune intersection
+     */
     public final List<Point> findIntersections(Ray ray) {
         var intersections = calcIntersections(ray);
         return intersections == null ? null

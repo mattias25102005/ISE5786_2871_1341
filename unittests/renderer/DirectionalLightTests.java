@@ -9,7 +9,14 @@ import primitives.*;
  * Tests unitaires pour la classe DirectionalLight (Exigence 6).
  */
 class DirectionalLightTests {
+    /**
+     * Constructeur par défaut nécessaire pour que Javadoc ne signale pas l'absence de commentaire.
+     */
+    DirectionalLightTests() {}
 
+    /**
+     * Vérifie que l'intensité d'une DirectionalLight est identique quel que soit le point.
+     */
     @Test
     void testGetIntensity() {
         Color intensity = new Color(255, 255, 255);
@@ -23,6 +30,9 @@ class DirectionalLightTests {
                 "L'intensité directionnelle doit être constante n'importe où");
     }
 
+    /**
+     * Vérifie que getL retourne la direction normalisée de la lumière.
+     */
     @Test
     void testGetL() {
         Vector dir = new Vector(1, 1, 1);

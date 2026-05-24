@@ -9,11 +9,14 @@ import primitives.Vector;
  */
 public class PointLight extends Light implements LightSource {
 
+    /** Position de la source ponctuelle */
     private final Point _position;
 
-    // Coefficients d'atténuation initiaux (Exigences 7.A & 7.B)
+    /** Coefficient constant d'atténuation (kc) */
     private double _kC = 1.0;
+    /** Coefficient linéaire d'atténuation (kl) */
     private double _kL = 0.0;
+    /** Coefficient quadratique d'atténuation (kq) */
     private double _kQ = 0.0;
 
     /**
@@ -26,22 +29,41 @@ public class PointLight extends Light implements LightSource {
         this._position = position;
     }
 
-    // Méthodes de chaînage / Fluent API (Exigence 7.D)
+    /**
+     * Définit le coefficient kc (constante) pour l'atténuation.
+     * @param kC coefficient constant
+     * @return this pour chaînage
+     */
     public PointLight setKc(double kC) {
         this._kC = kC;
         return this;
     }
 
+    /**
+     * Définit le coefficient kl (linéaire) pour l'atténuation.
+     * @param kL coefficient linéaire
+     * @return this pour chaînage
+     */
     public PointLight setKl(double kL) {
         this._kL = kL;
         return this;
     }
 
+    /**
+     * Définit le coefficient kq (quadratique) pour l'atténuation.
+     * @param kQ coefficient quadratique
+     * @return this pour chaînage
+     */
     public PointLight setKq(double kQ) {
         this._kQ = kQ;
         return this;
     }
 
+    /**
+     * Calcule l'intensité reçue en un point p en tenant compte de l'atténuation.
+     * @param p point cible où l'on mesure l'intensité
+     * @return couleur atténuée reçue au point p
+     */
     @Override
     public Color getIntensity(Point p) {
         double d = _position.distance(p);
@@ -50,6 +72,11 @@ public class PointLight extends Light implements LightSource {
         return getIntensity().reduce((int) factor);
     }
 
+    /**
+     * Retourne le vecteur normalisé allant de la source vers le point p.
+     * @param p point cible
+     * @return vecteur normalisé L
+     */
     @Override
     public Vector getL(Point p) {
         // Le vecteur allant de la source vers le point p, normalisé

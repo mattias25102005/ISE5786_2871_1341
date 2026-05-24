@@ -34,20 +34,36 @@ public class Scene {
         this.name = name;
     }
 
+    /**
+     * Définit la couleur de fond de la scène.
+     * @param background couleur de fond
+     * @return la scène (pour chaînage)
+     */
     public Scene setBackground(Color background) {
         this.background = background;
         return this;
     }
 
+    /**
+     * Définit la lumière ambiante de la scène.
+     * @param ambientLight objet AmbientLight
+     * @return la scène (pour chaînage)
+     */
     public Scene setAmbientLight(AmbientLight ambientLight) {
         this.ambientLight = ambientLight;
         return this;
     }
 
+    /**
+     * Définit l'ensemble des géométries de la scène.
+     * @param geometries collection de géométries
+     * @return la scène (pour chaînage)
+     */
     public Scene setGeometries(Geometries geometries) {
         this.geometries = geometries;
         return this;
     }
+
 
     /**
      * Configure la liste complète des sources de lumière de la scène (Fluent API).

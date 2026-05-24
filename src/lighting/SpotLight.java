@@ -9,8 +9,10 @@ import primitives.Vector;
  */
 public class SpotLight extends PointLight {
 
+    /** Direction du faisceau (normalisée) */
     private final Vector _direction;
-    private double _narrowBeam = 1.0; // Exposant par défaut pour le faisceau
+    /** Exposant de concentration du faisceau (narrow beam) */
+    private double _narrowBeam = 1.0;
 
     /**
      * Constructeur pour le projecteur.

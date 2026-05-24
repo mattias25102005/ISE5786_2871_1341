@@ -9,7 +9,14 @@ import primitives.*;
  * Tests unitaires pour la classe SpotLight (Exigence 6).
  */
 class SpotLightTests {
+    /**
+     * Constructeur par défaut pour les tests (évite l'avertissement Javadoc).
+     */
+    SpotLightTests() {}
 
+    /**
+     * Vérifie l'intensité d'un SpotLight pour des points devant et derrière le faisceau.
+     */
     @Test
     void testGetIntensity() {
         Point lightPos = new Point(0, 0, 0);
@@ -30,6 +37,9 @@ class SpotLightTests {
                 "Le point situé derrière le SpotLight ne devrait recevoir aucune intensité");
     }
 
+    /**
+     * Vérifie que getL retourne le vecteur directionnel correct vers la cible.
+     */
     @Test
     void testGetL() {
         Point lightPos = new Point(0, 0, 0);

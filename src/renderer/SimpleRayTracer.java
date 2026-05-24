@@ -10,12 +10,18 @@ import scene.Scene;
  */
 public class SimpleRayTracer extends RayTracerBase {
 
+    /**
+     * Constructeur du traceur simple de rayons.
+     * @param scene la scène à rendre
+     */
     public SimpleRayTracer(Scene scene) {
         super(scene);
     }
 
     /**
      * Point d'entrée : trouve l'intersection visible la plus proche et calcule sa couleur.
+     * @param ray le rayon à tracer
+     * @return la couleur calculée pour le rayon
      */
     @Override
     public Color traceRay(Ray ray) {
@@ -30,6 +36,9 @@ public class SimpleRayTracer extends RayTracerBase {
 
     /**
      * Calcule la couleur globale (Ambiante + Émission + Effets locaux) après validation du cache.
+     * @param intersection intersection la plus proche
+     * @param ray le rayon incident
+     * @return couleur résultante
      */
     private Color calcColor(Intersection intersection, Ray ray) {
         return !preprocessIntersection(intersection, ray) ? Color.BLACK
@@ -40,6 +49,8 @@ public class SimpleRayTracer extends RayTracerBase {
 
     /**
      * Accumule les effets diffus et spéculaires de toutes les sources lumineuses de la scène.
+     * @param intersection intersection pour laquelle on calcule les effets locaux
+     * @return couleur résultante des effets locaux
      */
     private Color calcLocalEffects(Intersection intersection) {
         Color color = Color.BLACK;
@@ -64,7 +75,9 @@ public class SimpleRayTracer extends RayTracerBase {
     }
 
     /**
-     * Calcule la réflexion diffuse (Aspect mat - Loi de Lambert) via les données en cache.
+     * Calcule la réflexion diffuse (Loi de Lambert) en utilisant les données mises en cache.
+     * @param intersection intersection contenant la normale et la donnée lNormal
+     * @return composante diffuse (Double3)
      */
     private Double3 calcDiffuse(Intersection intersection) {
         double factor = Math.abs(intersection.lNormal);
@@ -72,7 +85,9 @@ public class SimpleRayTracer extends RayTracerBase {
     }
 
     /**
-     * Calcule la réflexion spéculaire (Aspect brillant - Modèle de Phong).
+     * Calcule la réflexion spéculaire selon le modèle de Phong en utilisant les données en cache.
+     * @param intersection intersection contenant v, n, l, lNormal et matériau
+     * @return composante spéculaire (Double3)
      */
     private Double3 calcSpecular(Intersection intersection) {
         Vector l = intersection.l;

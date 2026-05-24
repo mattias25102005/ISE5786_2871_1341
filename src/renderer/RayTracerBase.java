@@ -23,6 +23,9 @@ public abstract class RayTracerBase {
 
     /**
      * Remplit le cache géométrique lié à l'intersection.
+     * @param intersection l'intersection à prétraiter
+     * @param ray le rayon qui a produit l'intersection
+     * @return true si le prétraitement a réussi et que l'intersection est utilisable
      */
     protected boolean preprocessIntersection(Intersection intersection, Ray ray) {
         // 1. On stocke la direction du rayon
@@ -39,6 +42,9 @@ public abstract class RayTracerBase {
 
     /**
      * Remplit le cache géométrique spécifique lié à une source lumineuse donnée.
+     * @param intersection l'intersection dont on met à jour le cache
+     * @param light la source lumineuse courante
+     * @return true si le prétraitement pour cette source a réussi
      */
     protected boolean preprocessLightSource(Intersection intersection, LightSource light) {
         // 1. On enregistre la source lumineuse courante dans le cache
@@ -54,7 +60,9 @@ public abstract class RayTracerBase {
     }
 
     /**
-     * Traces a ray and returns the computed color.
+     * Trace un rayon et retourne la couleur calculée.
+     * @param ray le rayon à tracer
+     * @return la couleur résultante pour ce rayon
      */
     public abstract Color traceRay(Ray ray);
 }
