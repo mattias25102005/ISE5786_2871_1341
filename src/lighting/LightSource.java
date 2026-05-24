@@ -22,4 +22,6 @@ public interface LightSource {
      * @return Le vecteur direction normalisé (L)
      */
     public Vector getL(Point p);
+
+    public double getDistance(Point point);
 }

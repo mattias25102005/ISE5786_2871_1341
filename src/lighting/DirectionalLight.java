@@ -44,4 +44,12 @@ public class DirectionalLight extends Light implements LightSource {
         // Comme la lumière va "dans le sens" de _dir, le vecteur allant de la source vers le point est simplement _dir.
         return _dir;
     }
+
+    /**
+     * Pour une lumière directionnelle, la distance est considérée comme infinie.
+     */
+    @Override
+    public double getDistance(Point point) {
+        return Double.POSITIVE_INFINITY;
+    }
 }

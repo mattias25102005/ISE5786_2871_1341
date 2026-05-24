@@ -82,4 +82,8 @@ public class PointLight extends Light implements LightSource {
         // Le vecteur allant de la source vers le point p, normalisé
         return p.subtract(_position).normalize();
     }
+    @Override
+    public double getDistance(Point point) {
+        return _position.distance(point); // Calcule la distance réelle entre la lampe et le point
+    }
 }
