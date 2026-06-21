@@ -69,7 +69,7 @@ class TransparencyReflectionTests {
                         new Point(-1500, -1500, -2000)) //
                         .setEmission(new Color(20, 20, 20)) //
                         .setMaterial(new Material().setKR(new Double3(0.5, 0, 0.4))));
-        _scene.setAmbientLight(new AmbientLight(new Color(26, 26, 26)));
+        _scene.setAmbientLight(new AmbientLight(new Color(26, 26, 26), Double3.ONE));
         _scene.lights.add(new SpotLight(new Color(1020, 400, 400), new Point(-750, -750, -150), new Vector(-1, -1, -4)) //
                 .setKl(0.00001).setKq(0.000005));
 
@@ -99,7 +99,7 @@ class TransparencyReflectionTests {
                         .setMaterial(new Material().setKD(0.5).setKS(0.5).setShininess(60)),
                 new Sphere(new Point(60, 50, -50), 30D).setEmission(new Color(BLUE))
                         .setMaterial(new Material().setKD(0.2).setKS(0.2).setShininess(30).setKT(0.6)));
-        _scene.setAmbientLight(new AmbientLight(new Color(38, 38, 38)));
+        _scene.setAmbientLight(new AmbientLight(new Color(38, 38, 38), Double3.ONE));
         _scene.lights.add(
                 new SpotLight(new Color(700, 400, 400), new Point(60, 50, 0), new Vector(0, 0, -1))
                         .setKl(4E-5).setKq(2E-7));
@@ -120,7 +120,7 @@ class TransparencyReflectionTests {
     @org.junit.jupiter.api.Test
     void testCustomSceneFinal() {
         // Fond de scène sombre
-        _scene.setAmbientLight(new AmbientLight(new Color(10, 10, 10)));
+        _scene.setAmbientLight(new AmbientLight(new Color(10, 10, 10), Double3.ONE));
 
         _scene.geometries.add(
                 // 1. Sol miroir (Placé en bas, à y = -60)

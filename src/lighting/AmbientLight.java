@@ -1,6 +1,7 @@
 package lighting;
 
 import primitives.Color;
+import primitives.Double3;
 
 /**
  * Lumière ambiante : éclaire uniformément la scène sans direction.
@@ -23,9 +24,11 @@ public class AmbientLight extends Light {
     /**
      * NOUVEAU CONSTRUCTEUR (Surcharge pour la compatibilité avec les tests du prof)
      * Permet de créer une lumière ambiante avec un coefficient ka par défaut à 1.0
-     * @param Ia Intensité de la couleur
+     *
+     * @param Ia  Intensité de la couleur
+     * @param one
      */
-    public AmbientLight(Color Ia) {
+    public AmbientLight(Color Ia, Double3 one) {
         super(Ia); // Équivaut à Ia.scale(1.0)
     }
 }

@@ -22,6 +22,18 @@ public class Material {
     /** Exposant de brillance/polissage (Partie B - Point 5.א) */
     public int nShininess = 0;
 
+    /** Rayon de flou pour la réflexion (Glossy Surfaces) */
+    public double blurReflectionRadius = 0.0;
+
+    /** Rayon de flou pour la réfraction (Diffuse Glass) */
+    public double blurRefractionRadius = 0.0;
+
+    /** Nombre de rayons dans le faisceau d'échantillonnage (1 par défaut) */
+    public int sampleCount = 1;
+
+    /** Mode d'échantillonnage par défaut */
+    public SamplingType samplingType = SamplingType.GRID;
+
     /** Constructeur par défaut */
     public Material() {}
 
@@ -137,6 +149,45 @@ public class Material {
      */
     public Material setShininess(int nShininess) {
         this.nShininess = nShininess;
+        return this;
+    }
+
+    // --- Configuration Mini-Projet : Glossy Surfaces & Diffuse Glass ---
+    /**
+     * Définit le rayon de flou pour la réflexion (Glossy).
+     * @param radius rayon de la zone d'échantillonnage
+     * @return this pour chaînage
+     */
+    public Material setBlurReflectionRadius(double radius) {
+        this.blurReflectionRadius = radius;
+        return this;
+    }
+
+    /**
+     * Définit le rayon de flou pour la réfraction (Diffuse Glass).
+     * @param radius rayon de la zone d'échantillonnage
+     * @return this pour chaînage
+     */
+    public Material setBlurRefractionRadius(double radius) {
+        this.blurRefractionRadius = radius;
+        return this;
+    }
+
+    /**
+     * Définit le nombre de rayons envoyés dans le faisceau d'échantillonnage.
+     * @param sampleCount nombre de rayons (doit être >= 1)
+     * @return this pour chaînage
+     */
+    public Material setSampleCount(int sampleCount) {
+        if (sampleCount < 1) {
+            throw new IllegalArgumentException("Le nombre d'échantillons doit être au moins de 1.");
+        }
+        this.sampleCount = sampleCount;
+        return this;
+    }
+
+    public Material setSamplingType(SamplingType samplingType) {
+        this.samplingType = samplingType;
         return this;
     }
 }

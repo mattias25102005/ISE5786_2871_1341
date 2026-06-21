@@ -29,8 +29,7 @@ class ShadowTests {
     private final Scene          _scene         = new Scene("Test scene");
     /** Camera builder of the tests */
     private final Camera.Builder _cameraBuilder = Camera.getBuilder()
-            .setLocation(new Point(0, 0, 1000))
-            .setVpDistance(1000)
+            .setLocation(new Point(0, 0, 1000))            .setVpDistance(1000)
             .setVpSize(200, 200)
             .setDirection(Point.ZERO, Vector.AXIS_Y)
             // .setDirection(new Point(-8, -78, 0), Vector.AXIS_Y) // debug
