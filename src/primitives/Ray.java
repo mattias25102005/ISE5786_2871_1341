@@ -1,6 +1,11 @@
 package primitives;
 
 import geometries.api.Intersectable.Intersection;
+import renderer.Blackboard;
+import primitives.SamplingType;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -54,6 +59,59 @@ public class Ray {
     }
 
     /**
+     * Génère un faisceau de rayons (Beam) échantillonné autour de ce rayon.
+     * Cette méthode centralisée remplace les anciennes implémentations de Camera et SimpleRayTracer.
+     *
+     * @param distance    La distance entre l'origine du rayon et le plan de projection (1 pour le Glossy, distance du ViewPlane pour la Caméra)
+     * @param width       La largeur de la zone de flou/pixel
+     * @param height      La hauteur de la zone de flou/pixel
+     * @param sampleCount Le nombre total de rayons souhaités
+     * @param type        Le type d'échantillonnage (GRID, RANDOM, JITTERED)
+     * @return Liste de rayons formant le faisceau
+     */
+    public List<Ray> generateBeam(double distance, double width, double height, int sampleCount, SamplingType type) {
+        List<Ray> beam = new ArrayList<>();
+
+        // Si la zone est nulle ou 1 seul échantillon demandé, on conserve uniquement ce rayon idéal
+        if ((width <= 0 && height <= 0) || sampleCount <= 1) {
+            beam.add(this);
+            return beam;
+        }
+
+        // 1. Point central sur le plan à la distance donnée
+        Point center = this.getPoint(distance);
+
+        // 2. Construction d'un repère local 2D (u, w) orthogonal à la direction du rayon
+        Vector arbitrary = new Vector(1, 0, 0);
+        try {
+            _direction.crossProduct(arbitrary);
+        } catch (IllegalArgumentException e) {
+            arbitrary = new Vector(0, 1, 0); // Cas où la direction est colinéaire à (1,0,0)
+        }
+
+        Vector u = _direction.crossProduct(arbitrary).normalize();
+        Vector w = _direction.crossProduct(u).normalize();
+
+        // 3. Récupération des décalages 2D normalisés [-0.5, 0.5] du Blackboard
+        List<Double3> offsets = Blackboard.generateSamples(sampleCount, type);
+
+        // 4. Transformation des décalages en rayons 3D
+        for (Double3 offset : offsets) {
+            double deltaX = offset._d1() * width;
+            double deltaY = offset._d2() * height;
+
+            Point targetPoint = center;
+            if (!Util.isZero(deltaX)) targetPoint = targetPoint.add(u.scale(deltaX));
+            if (!Util.isZero(deltaY)) targetPoint = targetPoint.add(w.scale(deltaY));
+
+            Vector beamDir = targetPoint.subtract(_origin).normalize();
+            beam.add(new Ray(_origin, beamDir));
+        }
+
+        return beam;
+    }
+
+    /**
      * Returns the origin point of the ray.
      *
      * @return origin point
@@ -103,8 +161,8 @@ public class Ray {
     public Point findClosestPoint(List<Point> points) {
         return points == null || points.isEmpty() ? null
                 : findClosestIntersection(points.stream()
-                                          .map(point -> new Intersection(null, point))
-                                          .toList()).point;
+                .map(point -> new Intersection(null, point))
+                .toList()).point;
     }
 
     /**

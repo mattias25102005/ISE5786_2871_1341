@@ -118,29 +118,44 @@ class TransparencyReflectionTests {
      * Mixant au moins 4 géométries avec ombres partielles, réflexion et réfraction.
      */
     @org.junit.jupiter.api.Test
-    void testCustomSceneFinal() {
+    void testCustomSceneFinalMagnifiqueEtRapide() {
         // Fond de scène sombre
         _scene.setAmbientLight(new AmbientLight(new Color(10, 10, 10), Double3.ONE));
 
         _scene.geometries.add(
-                // 1. Sol miroir (Placé en bas, à y = -60)
+                // 1. Sol miroir Glossy - Effet flou lisse (GRID 9)
                 new geometries.impl.Triangle(new Point(-200, -60, -150), new Point(200, -60, -150), new Point(0, -60, 100))
-                        .setMaterial(new Material().setKD(0.2).setKS(0.2).setShininess(30).setKR(0.8)),
+                        .setMaterial(new Material()
+                                .setKD(0.2).setKS(0.2).setShininess(30).setKR(0.8)
+                                .setBlurReflectionRadius(4.0) // Flou élégant
+                                .setSampleCount(9)            // 9 rayons en GRID = fini les grains, c'est lisse !
+                                .setSamplingType(SamplingType.GRID)),
 
-                // 2. Sphère principale hautement transparente au centre
+                // 2. Sphère principale au centre - Verre dépoli Diffuse (GRID 9)
                 new geometries.impl.Sphere(new Point(0, 0, -50), 40D).setEmission(new Color(0, 30, 150))
-                        .setMaterial(new Material().setKD(0.2).setKS(0.4).setShininess(100).setKT(0.7)),
+                        .setMaterial(new Material()
+                                .setKD(0.2).setKS(0.4).setShininess(100).setKT(0.7)
+                                .setBlurRefractionRadius(3.5) // Bel effet givré opaque
+                                .setSampleCount(9)            // Échantillonnage GRID pour adoucir la sphère
+                                .setSamplingType(SamplingType.GRID)),
 
                 // 3. Petite sphère opaque et brillante nichée derrière à gauche
                 new geometries.impl.Sphere(new Point(-45, -20, -100), 18D).setEmission(new Color(150, 0, 0))
-                        .setMaterial(new Material().setKD(0.5).setKS(0.5).setShininess(80)),
+                        .setMaterial(new Material()
+                                .setKD(0.5).setKS(0.5).setShininess(80)
+                                .setBlurReflectionRadius(2.0)
+                                .setSampleCount(4)            // Léger flou rapide
+                                .setSamplingType(SamplingType.GRID)),
 
-                // 4. Seconde petite sphère miroir à droite
+                // 4. Seconde petite sphère miroir à droite (Miroir pur, très rapide)
                 new geometries.impl.Sphere(new Point(45, -20, -80), 15D).setEmission(new Color(20, 20, 20))
-                        .setMaterial(new Material().setKD(0.1).setKS(0.9).setShininess(150).setKR(0.7))
+                        .setMaterial(new Material()
+                                .setKD(0.1).setKS(0.9).setShininess(150).setKR(0.7)
+                                .setBlurReflectionRadius(0)   // On la laisse nette pour économiser un max de temps
+                                .setSampleCount(1))
         );
 
-        // Sources de lumières directionnelles (Spotlight et Pointlight)
+        // Sources de lumières directionnelles
         _scene.lights.add(
                 new lighting.SpotLight(new Color(700, 400, 400), new Point(60, 80, 100), new Vector(-0.6, -0.8, -2))
                         .setKl(4E-5).setKq(2E-7)
@@ -150,14 +165,15 @@ class TransparencyReflectionTests {
                         .setKl(0.0005).setKq(0.00005)
         );
 
-        // Alignement horizontal parfait et sécurisé pour la caméra
+        // Configuration de la caméra avec SUPER SAMPLING de l'image intégrée
         _cameraBuilder
                 .setLocation(new Point(0, 0, 1000))
-                .setDirection(Point.ZERO, Vector.AXIS_Y) // Regarde droit vers (0,0,0) avec l'axe Y vers le haut
+                .setDirection(Point.ZERO, Vector.AXIS_Y)
                 .setVpDistance(1000).setVpSize(200, 200)
-                .setResolution(800, 800)
+                .setResolution(600, 600)   // Le sweet spot : plus net que 400, mais 2x plus rapide que 800 !
+                .setSuperSampling(4)       // Anti-aliasing activé pour lisser tous les contours de la scène
                 .build()
                 .renderImage()
-                .writeToImage("customSceneFinal");
+                .writeToImage("customSceneFinalMagnifique");
     }
 }

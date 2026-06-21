@@ -92,7 +92,10 @@ public class SimpleRayTracer extends RayTracerBase {
 
         // --- Effet global 1 : Réflexion (Miroir / Glossy) ---
         Ray idealReflectedRay = constructReflectedRay(intersection.point, ray.getDirection(), intersection.normal);
-        List<Ray> reflectedBeam = generateBeam(idealReflectedRay, material.blurReflectionRadius, material.sampleCount, material.samplingType);
+
+        // Utilisation de la nouvelle méthode de Ray (distance = 1.0, largeur/hauteur = diamètre du flou)
+        double reflectionDiameter = material.blurReflectionRadius * 2;
+        List<Ray> reflectedBeam = idealReflectedRay.generateBeam(1.0, reflectionDiameter, reflectionDiameter, material.sampleCount, material.samplingType);
 
         Color reflectionColor = Color.BLACK;
         int validReflectedRays = 0;
@@ -110,7 +113,10 @@ public class SimpleRayTracer extends RayTracerBase {
 
         // --- Effet global 2 : Réfraction (Transparence / Verre dépoli) ---
         Ray idealRefractedRay = constructRefractedRay(intersection.point, ray.getDirection(), intersection.normal);
-        List<Ray> refractedBeam = generateBeam(idealRefractedRay, material.blurRefractionRadius, material.sampleCount, material.samplingType);
+
+        // Utilisation de la nouvelle méthode de Ray (distance = 1.0, largeur/hauteur = diamètre du flou)
+        double refractionDiameter = material.blurRefractionRadius * 2;
+        List<Ray> refractedBeam = idealRefractedRay.generateBeam(1.0, refractionDiameter, refractionDiameter, material.sampleCount, material.samplingType);
 
         Color refractionColor = Color.BLACK;
         int validRefractedRays = 0;
@@ -127,88 +133,6 @@ public class SimpleRayTracer extends RayTracerBase {
         }
 
         return color;
-    }
-
-    /**
-     * Génère un faisceau de rayons échantillonnés (Beam) autour d'un rayon idéal.
-     * Calcule dynamiquement GRID, RANDOM et JITTERED à la volée.
-     */
-    private List<Ray> generateBeam(Ray idealRay, double blurRadius, int sampleCount, SamplingType type) {
-        List<Ray> beam = new ArrayList<>();
-
-        // Si aucun flou ou 1 seul échantillon demandé, on conserve uniquement le rayon idéal
-        if (blurRadius <= 0 || sampleCount <= 1) {
-            beam.add(idealRay);
-            return beam;
-        }
-
-        Vector v = idealRay.getDirection();
-        Point p0 = idealRay.getOrigin();
-
-        // 1. Centre du repère de projection local à une distance d_T = 1
-        Point center = p0.add(v);
-
-        // 2. Construction d'un repère local 2D (u, w) orthogonal à la direction v
-        Vector arbitrary = new Vector(1, 0, 0);
-        try {
-            v.crossProduct(arbitrary);
-        } catch (IllegalArgumentException e) {
-            arbitrary = new Vector(0, 1, 0); // Cas où v est colinéaire à (1,0,0)
-        }
-
-        Vector u = v.crossProduct(arbitrary).normalize();
-        Vector w = v.crossProduct(u).normalize();
-
-        // --- CASE 1 : SAMPLING RANDOM PUR (Indépendant de la grille) ---
-        if (type == SamplingType.RANDOM) {
-            for (int k = 0; k < sampleCount; k++) {
-                // Éparpille les rayons de façon totalement désordonnée sur tout le carré de flou
-                double deltaX = (RANDOM_GENERATOR.nextDouble() - 0.5) * blurRadius;
-                double deltaY = (RANDOM_GENERATOR.nextDouble() - 0.5) * blurRadius;
-
-                Point targetPoint = center;
-                if (!Util.isZero(deltaX)) targetPoint = targetPoint.add(u.scale(deltaX));
-                if (!Util.isZero(deltaY)) targetPoint = targetPoint.add(w.scale(deltaY));
-
-                Vector beamDir = targetPoint.subtract(p0).normalize();
-                beam.add(new Ray(p0, beamDir));
-            }
-        }
-        // --- CASE 2 : SAMPLING STRUCTURÉ (GRID OU JITTERED, dépendent de la grille) ---
-        else {
-            // Échantillonnage mathématique par sous-cases
-            int n = (int) Math.sqrt(sampleCount);
-            if (n * n != sampleCount) {
-                n = (int) Math.round(Math.sqrt(sampleCount));
-            }
-            double step = 1.0 / n;
-
-            for (int i = 0; i < n; i++) {
-                for (int j = 0; j < n; j++) {
-                    double xOffset = 0.5; // Comportement GRID par défaut (milieu de la sous-case)
-                    double yOffset = 0.5;
-
-                    if (type == SamplingType.JITTERED) {
-                        // Aléatoire confiné de façon contrôlée dans sa propre case
-                        xOffset = RANDOM_GENERATOR.nextDouble();
-                        yOffset = RANDOM_GENERATOR.nextDouble();
-                    }
-
-                    // Calcul du décalage final par rapport au centre (dépend de la case i, j)
-                    double deltaX = ((j + xOffset) * step - 0.5) * blurRadius;
-                    double deltaY = ((i + yOffset) * step - 0.5) * blurRadius;
-
-                    Point targetPoint = center;
-                    if (!Util.isZero(deltaX)) targetPoint = targetPoint.add(u.scale(deltaX));
-                    if (!Util.isZero(deltaY)) targetPoint = targetPoint.add(w.scale(deltaY));
-
-                    Vector beamDir = targetPoint.subtract(p0).normalize();
-                    beam.add(new Ray(p0, beamDir));
-                }
-            }
-        }
-
-        return beam;
     }
 
     /**
